@@ -22,7 +22,7 @@ return [
 
     'sendgrid' => [
         'domain' => 'www.mymovielist.co',
-        'secret' => env('SENDGRID_SECRET'),,
+        'secret' => env('SENDGRID_SECRET'),
     ],
 
     'ses' => [
