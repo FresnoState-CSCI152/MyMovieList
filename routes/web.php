@@ -40,11 +40,15 @@ Route:: get('profile', 'UserController@profile');
 Route:: post('profile', 'UserController@update_avatar');
 
 // Discussion and Comments functionality
-Route::get('/discussion', 'PostsController@index');
-Route::get('/discussion/create', 'PostsController@create');
-Route::get('/discussion/{post}', 'PostsController@show');
-Route::post('/discussion', 'PostsController@store');
-Route::post('/discussion/{post}/comments', 'CommentsController@store');
+Route::get('/discussion', 'PostsController@index'); //Show all post
+Route::get('/discussion/create', 'PostsController@create'); //Show a form to create the post
+Route::get('/discussion/{post}', 'PostsController@show'); //Display the post
+Route::post('/discussion', 'PostsController@store'); //Store the post
+Route::get('/discussion/{post}/edit', 'PostsController@edit'); //Show a form to edit existing post
+Route::patch('/discussion/{post}', 'PostsController@update'); //Update the edited post
+Route::delete('/discussion/{post}', 'PostsController@destroy'); //Delete a post
+
+Route::post('/discussion/{post}/comments', 'CommentsController@store'); //Comment on the post
 
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');

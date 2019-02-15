@@ -47,4 +47,10 @@ class PostsController extends Controller
         // redirect to home page
         return redirect('discussion');
     }
+
+    public function edit($id)
+    {
+        $post = Post::find($id);
+        return view ('posts.edit',compact('post'));
+    }
 }

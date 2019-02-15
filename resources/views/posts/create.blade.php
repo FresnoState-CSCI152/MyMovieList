@@ -16,15 +16,13 @@
 
 			<div class="form-group">
 				<label for="title">Title:</label>
-				<input type="text" id="title" name="title" class="form-control" required>
+				<input type="text" id="title" name="title" class="form-control" placeholder="Title" required>
 			</div>
 
 			<div class="form-group">
 				<label for="body">Body:</label>
-				<textarea id="body" name="body" class="form-control" required></textarea>
+				<textarea id="body" name="body" class="form-control" placeholder="Body" required></textarea>
 			</div>
-
-			<hr>
 
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary">Post</button>

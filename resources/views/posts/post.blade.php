@@ -13,6 +13,6 @@
     	</div>
 	</div>
 
-	{!! $post->body !!}
+	{{ strip_tags($post->body) }}
 </div>
 <hr>
