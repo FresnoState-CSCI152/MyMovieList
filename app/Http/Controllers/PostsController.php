@@ -48,9 +48,20 @@ class PostsController extends Controller
         return redirect('discussion');
     }
 
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::find($id);
+        
         return view ('posts.edit',compact('post'));
+    }
+
+    public function update(Post $post)
+    {
+       
+
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->save();
+
+        return redirect('discussion');
     }
 }

@@ -31,9 +31,12 @@
 							{!! $post->body !!}
 						</div>
 					</div>
+                    <a href = "/discussion/{{$post->id}}/edit" class="btn btn-default">Edit</a>
 				</div>
 			</div>
 		</div>
+        
+        
 
 		{{-- List of available comments --}}
 		@if(count($post->comments))
