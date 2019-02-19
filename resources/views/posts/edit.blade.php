@@ -13,7 +13,7 @@
 
 			<div class="form-group">
 				<label for="body">Body:</label>
-				<textarea id="body" name="body" class="form-control" ##-Right here ## this="{{$post->body}}"  required></textarea>
+				<textarea id="body" name="body" class="form-control" placeholder= "Body" value= "{{$post->body}}" required></textarea>
 			</div>
 
 		
