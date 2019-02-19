@@ -13,9 +13,7 @@
 
 			<div class="form-group">
 				<label for="body">Body:</label>
-				<textarea id="body" name="body" class="form-control" placeholder= "Body" value= "{{$post->body}}" required></textarea>
-			</div>
-
+				<textarea id="body" name="body" class="form-control" required> {{$post->body}} </textarea>
 		
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary">Update Post</button>
