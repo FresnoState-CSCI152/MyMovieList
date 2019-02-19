@@ -40,6 +40,7 @@ Route:: get('profile', 'UserController@profile');
 Route:: post('profile', 'UserController@update_avatar');
 
 // Discussion and Comments functionality
+
 Route::get('/discussion', 'PostsController@index'); //Show all post
 Route::get('/discussion/create', 'PostsController@create'); //Show a form to create the post
 Route::get('/discussion/{post}', 'PostsController@show'); //Display the post

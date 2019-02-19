@@ -53,4 +53,15 @@ class PostsController extends Controller
         $post = Post::find($id);
         return view ('posts.edit',compact('post'));
     }
+
+    public function update($id)
+    {
+        $post = Post::find($id);
+
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->save();
+
+        return redirect('discussion');
+    }
 }
