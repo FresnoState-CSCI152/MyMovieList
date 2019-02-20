@@ -13,6 +13,6 @@
     	</div>
 	</div>
 
-	{{ $post->body }}
+	{{ html_entity_decode(strip_tags($post->body)) }}
 </div>
 <hr>

@@ -47,4 +47,19 @@ class PostsController extends Controller
         // redirect to home page
         return redirect('discussion');
     }
+
+    public function edit(Post $post)
+    {
+        
+        return view ('posts.edit',compact('post'));
+    }
+
+    public function update(Post $post)
+    {
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->save();
+
+        return redirect('discussion');
+    }
 }
