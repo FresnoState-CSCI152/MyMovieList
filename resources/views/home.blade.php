@@ -76,8 +76,13 @@
                                             </tbody>
                                         </table>
                                         
+                                        {{-- User Reviews Default --}}
                                         @if ($userId == Auth::user()->id)
+                                            {{-- Recommend to Friend Button Default --}}
                                             <button id={{ 'recommend_button_'.$review->movie_review_id }} onclick="showRecommendForm({{ $review->movie_review_id }})" class='btn btn-primary mb-2'>Recommend to a friend</button>
+                                            {{-- Edit Button Default --}}
+                                            <button type="button" id={{ 'edit_button_'.$review->movie_review_id }} class='btn btn-danger mb-2 float-right' onclick="showEdit({{$review->movie_review_id}})">Edit</button>
+                                            {{-- Recommend Movie Form --}}
                                             <form class='form-inline' id={{ 'recommend_form_'.$review->movie_review_id }} style='display: none'>
                                                 <label class='sr-only' for='recommendee_id'>Name</label>
                                                 <select class='custom-select mb-2 mr-sm-2' id={{ 'recommendee_id_'.$review->movie_review_id }} name='recommendee_id' required>
@@ -87,9 +92,9 @@
                                                 </select>
                                                 <input value='{{ $review->movie_review_id }}' id='movie_review_id' name='movie_review_id' style='display: none'>
 
+                                                {{--Recommend Movie Form Buttons --}}
                                                 <button type='button' class='btn btn-danger mb-2' onclick="hideRecommendForm({{ $review->movie_review_id }})">Cancel</button>
                                                 <button type='button' class='btn btn-primary mb-2 ml-2' onclick="recommendMovie({{ $review->movie_review_id }})">Recommend</button>
-
                                             </form>
                                             <div id={{ 'recommend_message_'.$review->movie_review_id }}></div>
 
@@ -161,21 +166,26 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <!--Submit Review-->
+                                        {{-- Submit Review --}}
                                         @if ($userId == Auth::user()->id)
+                                        {{-- Recommend List Review Buttons --}}
                                         <button id={{ 'recommended_review_button_'.$recommend->movie_review_id }} onclick="showRecommendReviewForm({{ $recommend->movie_review_id }})" class='btn btn-primary mb-2'>Review Movie</button>
+                                        {{-- Stars --}}
                                         <div id="review_for_{{ $recommend->movie_review_id }}">
                                         <x-star-rating id="starRating_{{ $recommend->movie_review_id }}" value="0" number="10"></x-star-rating><div class="form-group"><label for="review">Your Review:</label><textarea class="form-control" id="recommended_review_form_{{ $recommend->movie_review_id }}" rows="3"></textarea>
+                                       {{-- Submit Review Button --}}
                                         <button id={{ 'submit_review_button_'.$recommend->movie_review_id }} onclick="submit_reivew({{ Auth::user()->id}},{{ $recommend->movie_review_id }}, {{ $recommend->r_id }}, {{ $recommend->tmdb_id }})" class='btn btn-primary mb-2'>Submit Review</button>
+                                       {{-- Cancel Review for Recommended Movie Button --}}
                                         <button id={{ 'cancel_review_button_'.$recommend->movie_review_id }} onclick="hideRecommendReviewForm({{ $recommend->movie_review_id }})" class='btn btn-primary mb-2 btn btn-danger'>Cancel Review</button>
                                         </div>
                                         </div>
+                                        {{-- Hide Form Default--}}
                                         <script type="text/javascript">
                                             var recommendForm = $('#review_for_'+{{ $recommend->movie_review_id }});
                                             recommendForm.hide();
                                         </script>
                                         @endif
-                                        <!-- End Submit Review-->
+                                        {{-- End Submit Review --}}
                                         </div>
                                         </div>
                                         </div>
