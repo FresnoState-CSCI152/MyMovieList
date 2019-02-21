@@ -31,7 +31,9 @@
 							{!! $post->body !!}
 						</div>
 					</div>
-                    <a href = "/discussion/{{$post->id}}/edit" class="btn btn-default">Edit</a>
+                    <br>
+                    <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
+
 				</div>
 			</div>
 		</div>
