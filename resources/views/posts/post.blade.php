@@ -12,7 +12,7 @@
 			</p>
     	</div>
 	</div>
-
-	{{ html_entity_decode(strip_tags($post->body)) }}
+	<!-- {!! $post->body!!} -->
+	{{ html_entity_decode(strip_tags($post->body)) }} 
 </div>
 <hr>
