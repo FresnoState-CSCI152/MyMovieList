@@ -17,9 +17,11 @@ Route::get('home','PageController@home');
 Route::get('about','PageController@about');
 Route::get('account','PageController@account');
 Route::get('public/{publicId}', 'PageController@publicProfile');
+Route::get('homestead', 'HomeController@index');
 
 // Search get and post methods
 Route::get('search', 'PageController@search');
+Route::get('GetMovieData', 'HomeController@GetMovieData');
 Route::post('TMBD', 'PageController@getTMDBjson');
 Route::post('TMBDdat', 'PageController@saveMovieData');
 Route::post('MovieReview', 'PageController@saveMovieReview');
