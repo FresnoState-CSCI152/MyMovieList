@@ -14,15 +14,19 @@
                             @else
                                 <h1>Welcome to {{ \App\User::find($userId)->name }}'s movie reviews</h1>
                             @endif
-                        </div>                           
-                    </div>                                  
+                        </div>
+                    </div>
                 </div>
 
                 <hr>
 
                 <div class='container'>
-                    @include('home/reviews')
-                    @include('home/recommends')
+                    <div id='reviews' user-id='{{$userId}}'>
+                        @include('home/reviews')
+                    </div>
+                    <div id='recommends' user-id='{{$userId}}'>
+                        @include('home/recommends')
+                    </div>
 
                     {{-- if the user has no reviews and no recommends, display hint --}}
                     <div class='row justify-content-center mt-4'>
@@ -122,7 +126,6 @@
 
 
     <script type='text/javascript'>
-
         //toggle recommend review
         function showRecommendReviewForm(id) {
             var recommendButton = $('#recommended_review_button_'+id);

@@ -12,6 +12,29 @@ use Illuminate\Validation\Rule;
 
 class PageController extends Controller
 {
+    private const VALID_GENRES = [
+        'all_genres',
+        'action',
+        'adventure',
+        'animation',
+        'comedy',
+        'crime',
+        'documentary',
+        'drama',
+        'family',
+        'fantasy',
+        'history',
+        'horror',
+        'music',
+        'mystery',
+        'romance',
+        'science_fiction',
+        'tv_movie',
+        'thriller',
+        'war',
+        'western',
+    ];
+
 	public function home()
 	{
 		if (Auth::check())
@@ -67,12 +90,12 @@ class PageController extends Controller
         else
         {
             return view('public', ['reviews' => $reviews,
-                                   'userId' => $publicId,
-                                   'friends' => $public->friends()->get(),]);
+                                   'userId' => $publicId,]);
         }
     }
 
-    private function userReviews($userId)
+    // Get the movies that a given user has reviewed, optionally filtered by genre
+    private function userReviews($userId, $genre = 'all_genres')
     {
         $reviews = DB::table('movie_reviews')
             ->join('movie_data','movie_data.tmdb_id','=','movie_reviews.tmdb_id')
@@ -88,14 +111,17 @@ class PageController extends Controller
                 'movie_data.description'
             )
             ->where('movie_reviews.user_id', $userId)
-            ->orderBy('movie_reviews.user_score', 'DESC')
-            ->get();
-            return $reviews;
+            ->orderBy('movie_reviews.user_score', 'DESC');
+        if ($genre !== 'all_genres') {
+            $reviews = $reviews->where("movie_data.$genre", true);
+        }
+        return $reviews->get();
     }
 
-    private function userRecommends($userId)
+    // Get the movies that a given user been recommended, optionally filtered by genre
+    private function userRecommends($userId, $genre = 'all_genres')
     {
-        return DB::table('movie_reviews')
+        $recommends = DB::table('movie_reviews')
             ->join('movie_data','movie_data.tmdb_id','=','movie_reviews.tmdb_id')
             ->join('recommends', 'recommends.movie_review_id', '=', 'movie_reviews.id')
             ->select(
@@ -113,8 +139,63 @@ class PageController extends Controller
                 'recommends.id as r_id'
             )
             ->orderBy('recommends.created_at', 'DESC')
-            ->where('recommends.recommendee_id', $userId)
-            ->get();
+            ->where('recommends.recommendee_id', $userId);
+        if ($genre !== 'all_genres') {
+            $recommends = $recommends->where("movie_data.$genre", true);
+        }
+        return $recommends->get();
+    }
+
+    // Return the html of a given user's movies, filtered by genre
+    public function getReviewCards($userId, $genre) {
+        $this->validate(request(), [
+            'userId' => [
+                'bail',
+                'exists:users,id',
+            ],
+            'genre' => [
+                'bail',
+                function ($attribute, $value, $fail) {
+                    if (!in_array($value, self::VALID_GENRES)) {
+                        $fail("Not a valid genre");
+                    }
+                },
+            ],
+        ]);
+
+        $friends = \App\User::find($userId)->friends()->get();
+        $reviews = $this->userReviews($userId, $genre);
+
+        $reviewCardsHtml = view('home/review-cards')
+            ->with(compact('reviews', 'userId', 'friends'))
+            ->render();
+        return $reviewCardsHtml;
+    }
+
+    // Return the html of a given user's recommended movies, filtered by genre
+    public function getRecommendCards($userId, $genre) {
+        $this->validate(request(), [
+            'userId' => [
+                'bail',
+                'exists:users,id',
+            ],
+            'genre' => [
+                'bail',
+                function ($attribute, $value, $fail) {
+                    if (!in_array($value, self::VALID_GENRES)) {
+                        $fail("Not a valid genre");
+                    }
+                },
+            ],
+        ]);
+
+        $friends = \App\User::find($userId)->friends()->get();
+        $recommends = $this->userRecommends($userId, $genre);
+
+        $recommendCardsHtml = view('home/recommend-cards')
+            ->with(compact('recommends', 'userId', 'friends'))
+            ->render();
+        return $recommendCardsHtml;
     }
 
     public function recommendMovie(Request $request)
@@ -256,7 +337,74 @@ class PageController extends Controller
 			$MovDat->title = $request->input('title');
 			$MovDat->img_path = $request->input('img_path');
 			$MovDat->release = $request->input('release');
-			$MovDat->description = $request->input('description');
+            $MovDat->description = $request->input('description');
+            $genreIds = $request->input('genre_ids');
+            for ($i=0; $i < count($genreIds); $i++) {
+                switch ($genreIds[$i]) {
+                    case 28:
+                        $MovDat->action = true;
+                        break;
+                    case 12:
+                        $MovDat->adventure = true;
+                        break;
+                    case 16:
+                        $MovDat->animation = true;
+                        break;
+                    case 35:
+                        $MovDat->comedy = true;
+                        break;
+                    case 80:
+                        $MovDat->crime = true;
+                        break;
+                    case 99:
+                        $MovDat->documentary = true;
+                        break;
+                    case 18:
+                        $MovDat->drama = true;
+                        break;
+                    case 10751:
+                        $MovDat->family = true;
+                        break;
+                    case 14:
+                        $MovDat->fantasy = true;
+                        break;
+                    case 36:
+                        $MovDat->history = true;
+                        break;
+                    case 27:
+                        $MovDat->horror = true;
+                        break;
+                    case 10402:
+                        $MovDat->music = true;
+                        break;
+                    case 9648:
+                        $MovDat->mystery = true;
+                        break;
+                    case 10749:
+                        $MovDat->romance = true;
+                        break;
+                    case 878:
+                        $MovDat->science_fiction = true;
+                        break;
+                    case 10770:
+                        $MovDat->tv_movie = true;
+                        break;
+                    case 53:
+                        $MovDat->thriller = true;
+                        break;
+                    case 10752:
+                        $MovDat->war = true;
+                        break;
+                    case 37:
+                        $MovDat->western = true;
+                        break;
+                    default:
+                        return response()->json([
+                            'genre_error' => 'The genre with id '.$genreIds[$i].' wasn\'t found!',
+                        ]);
+                        break;
+                }
+            }
 			//If successful return sucess!
 			$MovDat->save();
 			return response()->json([
