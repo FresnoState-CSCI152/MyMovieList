@@ -17,7 +17,7 @@
             						<img src="/uploads/avatars/{{ $post->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%">
             					</div>
             					<div class="col d-flex align-items-center">
-            						<h6><strong>{{ $post->user->name }}</strong></h6>
+            						<h6><strong><a href="/public/{{ $post->user->id }}">{{ $post->user->name }}</a></strong></h6>
             					</div>
             					<div class="col d-flex align-items-center justify-content-end">
             						<h6><strong>{{ $post->created_at->diffForHumans() }}</strong>
@@ -51,7 +51,7 @@
             						<img src="/uploads/avatars/{{ $comment->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%">
             					</div>
             					<div class="col d-flex align-items-center">
-            						<h6><strong>{{ $comment->user->name }}</strong></h6>
+            						<h6><strong><a href="/public/{{ $comment->user->id }}">{{ $comment->user->name }}</a></strong></h6>
             					</div>
             					<div class="col d-flex align-items-center justify-content-end">
             						<h6>

@@ -39,6 +39,11 @@ class User extends Authenticatable
         $this->post()->save($post);
     }
 
+    public function publicProfile()
+    {
+        return $this->belongsToMany('App\User', 'user_friend', 'user_id', 'public_id')->withTimestamps();
+    }
+
     public function friends()
     {
         return $this->belongsToMany('App\User', 'user_friend', 'user_id', 'friend_id')->withTimestamps();
