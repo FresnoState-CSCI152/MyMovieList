@@ -16,16 +16,12 @@ Route::get('/', 'PageController@home');
 Route::get('home','PageController@home');
 Route::get('about','PageController@about');
 Route::get('account','PageController@account');
-Route::get('public/{publicId}', 'PageController@publicProfile');
 
 // Search get and post methods
 Route::get('search', 'PageController@search');
 Route::post('TMBD', 'PageController@getTMDBjson');
 Route::post('TMBDdat', 'PageController@saveMovieData');
 Route::post('MovieReview', 'PageController@saveMovieReview');
-Route::post('EditReview', 'PageController@updateReview');
-Route::get('reviews/{userId}/{genre}', 'PageController@getReviewCards');
-Route::get('recommends/{userId}/{genre}', 'PageController@getRecommendCards');
 
 // Login and Register
 Auth::routes();

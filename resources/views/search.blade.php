@@ -2,12 +2,12 @@
 
 @section ('content')
 
-<main>
+<main class = "py-4">
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-md-8">
 				<div class="card shadow-sm bg-white rounded">
-					<div class="card-header"><h1>{{ __('Search') }}</h1></div>
+					<div class="card-header">{{ __('Search') }}</div>
 
 					<div class="card-body">
 						<div class="form-group row">
@@ -88,8 +88,7 @@
 				'poster': currentMovie['poster_path'],
 				'release': currentMovie['release_date'],
 				'tmdb_score': currentMovie['vote_average'],
-				'description': currentMovie['overview'],
-				'genre_ids': currentMovie['genre_ids'],
+				'description': currentMovie['overview']
 			}
 			JsonStrings[i] = data;
 			visbleAddMovieButton(true, false, currentMovie['id']);
@@ -144,7 +143,6 @@
 			'release': moviedata['release'],
 			'tmdb_score': moviedata['tmdb_score'],
 			'description': moviedata['description'],
-			'genre_ids': moviedata['genre_ids'],
 		}
 
 		var movRevData = {
