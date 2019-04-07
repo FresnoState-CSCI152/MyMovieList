@@ -34,7 +34,7 @@ class FriendsController extends Controller
         $sender->friendRequestsSent()->attach($receiverId);
 
         request()->session()->flash("requestSuccess", "You have successfully made the friend request.");
-        return redirect()->route("friends");
+        return redirect()->back();
     }
 
     public function cancelFriendRequest()
