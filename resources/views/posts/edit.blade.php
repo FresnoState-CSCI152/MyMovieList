@@ -21,9 +21,17 @@
 		
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary">Update Post</button>
-			</div>
+			</div>			
 
 			@include('errors/errors')
+	</form>
+
+	<form method ="POST" action ="/discussion/{{$post->id}}">	
+		{{method_field('DELETE')}}
+		{{csrf_field()}}
+		<div class="form-group">
+				<button type="submit" class="btn btn-danger">Delete Post</button>
+		</div>
 	</form>
 </div>
 
