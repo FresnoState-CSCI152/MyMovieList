@@ -38,7 +38,9 @@ class HomeController extends Controller
         $user_id = request('user_id');
         $movie_data = DB::table('movie_reviews')->
                 select('tmdb_id', 'user_score', 'review')->
-                where('user_id', $user_id)->get();
+                where('user_id', $user_id)->
+                orderby('user_score', 'desc')->
+                limit(10)->get();
         $merged = array();
         for ($i = 0; $i < count($movie_data); $i++) {
                 $tmdb_data = DB::table('movie_data')->

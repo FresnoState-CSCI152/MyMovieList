@@ -29,7 +29,7 @@
      
 {{-- Script --}}
 <script>
-
+	filer_num = 1;
 	//Top Ten List
 	function fill_my_top_ten(movie_list, tmbd_data){
 		var movie_img, movie_title;
@@ -42,7 +42,9 @@
 			});
 		});
 
-		list_string = '<div class="card"> <div class="card-body"><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left;"><h5 class="card-title" style="float: auto;">' + movie_title + '</h5><p>' + movie_list.user_score + '</p><p class="card-text">' + movie_list.tmdb_id + '</p></div></div>'
+		//movie_list.tmdb_id
+
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filer_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary">Review Details</button></div></div>'
 
 		$('#top-10-list').append(list_string);
 	}
