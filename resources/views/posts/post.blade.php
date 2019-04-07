@@ -8,11 +8,12 @@
     	</div>	
     	<div class="col d-flex align-items-center">
     		<p class="blog-post-meta">
-    			<a href="#{{-- add link to user profile here --}}">{{ $post->user->name }}</a> on {{ $post->created_at->toFormattedDateString() }}
+    			<a href="/public/{{ $post->user->id }}">{{ $post->user->name }}</a> on {{ $post->created_at->tz('America/Los_Angeles')->toFormattedDateString() }}
 			</p>
     	</div>
 	</div>
-	<!-- {!! $post->body!!} -->
-	{{ html_entity_decode(strip_tags($post->body)) }} 
+	
+	{{ str_limit($post->body) }}
+
 </div>
 <hr>
