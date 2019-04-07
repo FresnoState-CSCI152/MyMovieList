@@ -2,7 +2,8 @@
 
 @section ('content')
 
-<div id="overlay" onclick="off()">
+{{--Overlay for list display --}}
+<div id="overlay">
 	<br />
 	<br />
 	<br />
@@ -13,6 +14,7 @@
 	<div class='col-3 pb-4'>
 	        <img id="movie_image" class='img-fluid shadow' src=''>
 	</div>
+	{{-- Items on side of movie poster image--}}
   	<div class='col-9'>
 	<div class="table-responsive">
 		<table class='table table-bordered' style="color: white; background-color: rgba(0,0,0,1)">
@@ -34,7 +36,7 @@
 		    </tr>
 		    </tbody>
 		</table>
-	</div>
+	</div>{{--/table-repsonsive --}}
 
 	<div class="my_review_table table-responsive">
 	<table class='table table-bordered' style='color: white; background-color: rgba(0,0,0,1)'>
@@ -52,13 +54,17 @@
 	    </tr>
 	    </tbody>
 	</table>
-	</div>
-	</div>
-	</div>
-	</div>
+	</div>{{--/my_reivew_table--}}
 
+	<button class="btn btn-primary" onclick="location.href='home';">Go To Full List</button>
+	<button class="btn btn-danger" onclick="overlay_off()">Cancel</button>
+
+	</div> {{--/Col-9 --}}
+	</div> {{--/Row--}}
+	</div>{{--/Contaier --}}
 </div>
 
+{{--three lists --}}
 <div class="container">
 	<div class="row">
 		<div class="col">
@@ -111,7 +117,7 @@
 
 		completeButtonArgs = onButtonArguments + ', \'' + String(movie_list.user_score) + '\', \'' + String(movie_list.review.replace('\'', '')) + '\'';
 
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filer_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="on(' + completeButtonArgs + ')">Review Details</button></div></div>'
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filer_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review Details</button></div></div>'
 
 		$('#top-10-list').append(list_string);
 	}
@@ -146,8 +152,8 @@
 
 	get_movie_data({{Auth::user()->id}});
 
-	function on(title, img, description, release, tmbd_score, user_score, review) {
-		console.log(user_score + ' ' + review);
+	//Send information to overlay
+	function overlay_on(title, img, description, release, tmbd_score, user_score, review) {
 		$("#overlay").css('display', 'block');
   		$("#movie_image").attr("src",'http://image.tmdb.org/t/p/w200' + img);
   		$("#review_title").text(title);
@@ -158,7 +164,7 @@
   		$("#review_user_review").text(review);
 	}
 
-	function off() {
+	function overlay_off() {
    		$("#movie_image").attr("src",'');
   		$("#review_title").empty();
   		$("#review_description").empty();
