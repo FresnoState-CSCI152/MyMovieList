@@ -35,17 +35,22 @@
                 color: #fd0;
             }
         </style>
+
         <!-- JQuery -->
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    </head>
-    <body>
+            crossorigin="anonymous">
+        </script>
 
+        {{-- for ionicon icons --}}
+        <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
+    </head>
+
+    <body>
         @include('templates/topnav')
 
-        <div class="li">
+        <div class="m-4">
             @yield('content')
         </div>
 
