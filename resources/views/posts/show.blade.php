@@ -28,12 +28,16 @@
 
             			</div>
                 		<div class="card-body">
-							{{ $post->body }}
+							{!! $post->body!!}
 						</div>
 					</div>
+                    <br>
+                    <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
 				</div>
 			</div>
 		</div>
+        
+        
 
 		{{-- List of available comments --}}
 		@if(count($post->comments))
