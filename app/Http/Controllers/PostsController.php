@@ -48,8 +48,11 @@ class PostsController extends Controller
         return redirect('discussion');
     }
 
-    public function edit(Post $post)
+    public function edit(Post $post)    
     {         
+        if($post->user_id !== auth()->id()){
+            abort(403);
+        }
         return view ('posts.edit',compact('post'));    
     }
 
@@ -59,6 +62,11 @@ class PostsController extends Controller
         $post->body = request('body');
         $post->save();
 
+        return redirect('discussion');
+    }
+
+    public function destroy($id){
+        Post::find($id)->delete();
         return redirect('discussion');
     }
 }
