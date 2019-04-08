@@ -42,6 +42,62 @@
 		</div>
 
 	<hr>
+
+	<!-- Display user Information -->
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6">
+			<h4><strong>User Info</strong></h4>
+				<div class="col-sm-4">
+				</div>
+
+				<div class="row">
+					<div class="col-xs-1" id='infoTitles'>
+						<p>Email:</p>
+						<p>Gender:</p>
+						<p>Birthday:</p>
+						<p>Location:</p>
+					</div>
+					<div class="col-xs-2" id='userInfo'>
+						<p>{{$user->email}}</p>
+						<p>{{$user->gender}}</p>
+						<p>{{$user->birthday}}</p>
+						<p>{{$user->location}}</p>
+					</div>
+
+					<!-- Dropdown menu to select user Gender -->
+					<div class="col-xs-s">
+						<form action="/profile">
+							<select name="Gender">
+								<option value="Male">Male</option>
+								<option value="Female">Female</option>
+								<option value="-">-</option>
+							</select>
+							<br><br>
+						</form>
+					</div>
+				</div>
+
+				<div class="row">
+					<button class="button" onclick="showEditForm()">Edit</button>
+				</div>
+			</div>
+
+			<div class="col-sm-6">
+				<h4><strong>About me</strong></h4>
+					<div class="row">
+						<div class="col-xs-4">
+							<p>{{$user->about_me}}</p>
+					 	</div>
+
+					 	<div class="row">
+					 		<button class="button">Edit</button>
+					 	</div>
+					</div>
+			</div>
+		</div>
+	</div>
+
 	<!--
 	<div class ="container">
 		<div class="row">
@@ -60,5 +116,12 @@ function showImageForm()
 	editBtn.hide();
 }
 
+function showEditForm()
+{
+	var userInfo1 = $('#infoTitles');
+	var userInfo2 = $('#userInfo')
+	userInfo1.hide();
+	userInfo2.hide();
+}
 </script>
 @endsection
