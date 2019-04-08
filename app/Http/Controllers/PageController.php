@@ -60,6 +60,12 @@ class PageController extends Controller
             return redirect('home');
         }
 
+        // if current user is already friends with other user, go to their 'friends' page instead
+        elseif (Gate::allows("go-to-user-reviews", $publicId))
+        {
+            return redirect('friends/' . $publicId);
+        }
+
         // otherwise, return public profile view of other user
         else 
         {

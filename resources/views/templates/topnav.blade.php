@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   
     <div class="navbar-header">
-      <a href="/" class="navbar-left"><img src="/logo.png" width="200px"></a>
+      <a href="/" class="navbar-left"><img src="/logo-svg.svg" width="200px"></a>
     </div>
 
     {{-- hamburger/three-line toggler menu icon (for mobile/non-full-sized windows) --}}

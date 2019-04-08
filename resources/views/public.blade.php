@@ -18,6 +18,8 @@
                             {{-- {{ \App\User::find($userId) }} --}}
                             {{-- if current user's friend_id == public user's user_id --}}
                             {{-- then they are friends --}}
+
+                            {{-- @if(Gate::allows("go-to-user-reviews", $userId)) --}}
                                             
                             <form method="POST" action="/friends/createrequest">
                     
