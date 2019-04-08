@@ -38,7 +38,9 @@
 		</table>
 	</div>{{--/table-repsonsive --}}
 
-	<div class="my_review_table table-responsive">
+	<x-star-rating id="starRating_for_review" value="5" number="10"></x-star-rating>
+	<textarea class="form-control" id="submit_review_textarea" rows="3"></textarea>
+	<div id="my_review_table" class="table-responsive">
 	<table class='table table-bordered' style='color: white; background-color: rgba(0,0,0,1)'>
 	    <thead>
 	    <tr>
@@ -46,7 +48,6 @@
 	        <th scope='col'>My Review</th>
 	    </tr>
 	    </thead>
-
 	    <tbody>
 	    <tr>
 	        <td id="review_user_score"></td>
@@ -56,7 +57,7 @@
 	</table>
 	</div>{{--/my_reivew_table--}}
 
-	<button class="btn btn-primary" onclick="location.href='home';">Go To Full List</button>
+	<button id="overlay_button" class="btn btn-primary" onclick="location.href='home';">Go To Full List</button>
 	<button class="btn btn-danger" onclick="overlay_off()">Cancel</button>
 
 	</div> {{--/Col-9 --}}
@@ -121,7 +122,7 @@
 
 		completeButtonArgs = onButtonArguments + ', \'' + String(movie_list.user_score) + '\', \'' + String(movie_list.review.replace('\'', '')) + '\'';
 
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review Details</button></div></div>';
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', false)">Review Details</button></div></div>';
 
 		$('#top-10-list').append(list_string);
 	}
@@ -132,8 +133,10 @@
 		movie_title = movie_data.title;
 		movie_img = movie_data.poster_path;
 		tmdb_score = movie_data.vote_average;
-		completeButtonArgs = '';
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>TMDB Score: ' + tmdb_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review</button></div></div>';
+		release_date = movie_data.release_date;
+		//title, img, description, release, tmbd_score, user_score, review,
+		completeButtonArgs = '\'' + String(movie_title) + '\', \'' + movie_img + '\',\'' + String(movie_data.overview.replace('\'', '')) + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'0\',\'placeholder\'';
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>TMDB Score: ' + tmdb_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', true)">Review</button></div></div>';
 
 		$('#recommended_from_tmdb').append(list_string);
 	}
@@ -199,7 +202,7 @@
 	auto_recommend();
 
 	//Send information to overlay
-	function overlay_on(title, img, description, release, tmbd_score, user_score, review) {
+	function overlay_on(title, img, description, release, tmbd_score, user_score, review, submitting) {
 		$("#overlay").css('display', 'block');
   		$("#movie_image").attr("src",'http://image.tmdb.org/t/p/w200' + img);
   		$("#review_title").text(title);
@@ -208,6 +211,18 @@
   		$("#review_tmdb_score").text(tmbd_score);
   		$("#review_user_score").text(user_score);
   		$("#review_user_review").text(review);
+  		if(submitting) {
+  			$('#overlay_button').text('Submit Review');
+  			$('#starRating_for_review').show();
+  			$('#submit_review_textarea').show();
+  			$('#submit_review_textarea').val('');
+  			$('#my_review_table').hide();
+  		} else {
+  			$('#overlay_button').text('Go To Full List');
+  			$('#starRating_for_review').hide();
+  			$('#submit_review_textarea').hide();
+  			$('#my_review_table').show();
+  		}
 	}
 
 	function overlay_off() {
@@ -220,6 +235,79 @@
    		$('#review_user_score').empty();
   		$('#review_user_review').empty();
 	}
+
+
+	//Stars for now
+
+	        //Stars
+        class StarRating extends HTMLElement {
+            get value () {
+                return this.getAttribute('value') || 0;
+            }
+
+            set value (val) {
+                this.setAttribute('value', val);
+                this.highlight(this.value - 1);
+            }
+
+            get number () {
+                return this.getAttribute('number') || 5;
+            }
+
+            set number (val) {
+                this.setAttribute('number', val);
+
+                this.stars = [];
+
+                while (this.firstChild) {
+                    this.removeChild(this.firstChild);
+                }
+
+                for (let i = 0; i < this.number; i++) {
+                    let s = document.createElement('div');
+                    s.className = 'star';
+                    this.appendChild(s);
+                    this.stars.push(s);
+                }
+
+                this.value = this.value;
+            }
+
+            highlight (index) {
+                this.stars.forEach((star, i) => {
+                    star.classList.toggle('full', i <= index);
+                });
+            }
+
+            constructor () {
+                super();
+
+                this.number = this.number;
+
+                this.addEventListener('mousemove', e => {
+                    let box = this.getBoundingClientRect(),
+                        starIndex = Math.floor((e.pageX - box.left) / box.width * this.stars.length);
+
+                    this.highlight(starIndex);
+                });
+
+                this.addEventListener('mouseout', () => {
+                    this.value = this.value;
+                });
+
+                this.addEventListener('click', e => {
+                    let box = this.getBoundingClientRect(),
+                        starIndex = Math.floor((e.pageX - box.left) / box.width * this.stars.length);
+
+                    this.value = starIndex + 1;
+
+                    let rateEvent = new Event('rate');
+                    this.dispatchEvent(rateEvent);
+                });
+            }
+        }
+
+        customElements.define('x-star-rating', StarRating);
 </script>
 
 @endsection
