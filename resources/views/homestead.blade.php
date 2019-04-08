@@ -57,7 +57,8 @@
 	</table>
 	</div>{{--/my_reivew_table--}}
 
-	<button id="overlay_button" class="btn btn-primary" onclick="location.href='home';">Go To Full List</button>
+	<button id="overlay_button_home" class="btn btn-primary" onclick="location.href='home';">Go To Full List</button>
+	<button id="overlay_button_submit" class="btn btn-primary" onclick="confirmReview()">Submit</button>
 	<button class="btn btn-danger" onclick="overlay_off()">Cancel</button>
 
 	</div> {{--/Col-9 --}}
@@ -99,6 +100,11 @@
 	//change later
 	user_id = {{Auth::user()->id}};
 
+	//Send for review
+	var movRevData = {};
+	var movdata = [];
+	var current_title = '';
+
 	//Top Ten List
 	function fill_my_top_ten(movie_list, tmbd_data){
 
@@ -134,6 +140,18 @@
 		movie_img = movie_data.poster_path;
 		tmdb_score = movie_data.vote_average;
 		release_date = movie_data.release_date;
+
+		//Set For Submission
+		movdata.push({
+			'title': movie_title,
+			'tmdb_id': movie_data.id,
+			'img_path': movie_img,
+			'release': release_date,
+			'tmdb_score': tmdb_score,
+			'description': movie_data.overview,
+			'genre_ids': movie_data.genre_ids,
+		});
+
 		//title, img, description, release, tmbd_score, user_score, review,
 		completeButtonArgs = '\'' + String(movie_title) + '\', \'' + movie_img + '\',\'' + String(movie_data.overview.replace('\'', '')) + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'0\',\'placeholder\'';
 		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>TMDB Score: ' + tmdb_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', true)">Review</button></div></div>';
@@ -143,6 +161,7 @@
 
 	//Movie data from database
 	function get_movie_data() {
+		$('#top-10-list').empty();
 		$.ajaxSetup({          
             headers: {
                 "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
@@ -187,7 +206,6 @@
 			},
 			success: function(data) {
 			    data.success.forEach(function(obj){
-			    	console.log(obj);
 			    	fill_my_recommended(obj);
 			    });
 			},
@@ -198,11 +216,67 @@
 		});
 	}
 
+	//Submit Review Information
+	function confirmReview(){
+
+		$.ajaxSetup({          
+            headers: {
+                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+            }
+        });
+
+		var movieDataSubmit = {};
+		movdata.forEach(function(obj){
+			if(obj.title == current_title){
+				movieDataSubmit = obj;
+			}
+		})
+
+		movRevData = {
+			'user_id': user_id,
+			'tmdb_id': movieDataSubmit.tmdb_id,
+			'user_score': $('#starRating_for_review').val(),
+			'user_review': $('#submit_review_textarea').val()
+		}
+
+		console.log(movRevData);
+		console.log(movieDataSubmit);
+		$.ajax({
+			type: 'POST',
+			url: '/MovieReview',
+			data: movRevData,
+			success: function (data) {
+					if (data['success']) {
+						//If submission successful, refresh screen data;
+						filter_num = 1
+						overlay_off();
+						get_movie_data();
+						auto_recommend();
+					}
+				},
+			error: function() { 
+				console.log("Error trying to submit!");
+			}
+		});
+		$.ajax({
+			type: 'POST',
+			url: '/TMBDdat',
+			data: movieDataSubmit,
+			success: function (data) {
+					console.log(data);
+				},
+			error: function(error) { 
+				console.log("error posting TMDBdat");
+			}
+		});
+	}
+
 	get_movie_data();
 	auto_recommend();
 
 	//Send information to overlay
 	function overlay_on(title, img, description, release, tmbd_score, user_score, review, submitting) {
+		current_title = title;
 		$("#overlay").css('display', 'block');
   		$("#movie_image").attr("src",'http://image.tmdb.org/t/p/w200' + img);
   		$("#review_title").text(title);
@@ -212,13 +286,15 @@
   		$("#review_user_score").text(user_score);
   		$("#review_user_review").text(review);
   		if(submitting) {
-  			$('#overlay_button').text('Submit Review');
+  			$('#overlay_button_submit').show();
+  			$('#overlay_button_home').hide();
   			$('#starRating_for_review').show();
   			$('#submit_review_textarea').show();
   			$('#submit_review_textarea').val('');
   			$('#my_review_table').hide();
   		} else {
-  			$('#overlay_button').text('Go To Full List');
+  			$('#overlay_button_submit').hide();
+  			$('#overlay_button_home').show();
   			$('#starRating_for_review').hide();
   			$('#submit_review_textarea').hide();
   			$('#my_review_table').show();
