@@ -83,7 +83,7 @@
 		</div>
 		<div class="col">
 			<div class="mx-auto" style="width: 75%;">
-				Top From TMDB
+				Movies You May Enjoy
 			</div>
 			<div id="top-from-tmdb">
 			</div>
@@ -93,7 +93,10 @@
      
 {{-- Script --}}
 <script>
-	filer_num = 1;
+	filter_num = 1;
+	all_tmdb_ids = [];
+	top_tmbd_ids = [];
+
 	//Top Ten List
 	function fill_my_top_ten(movie_list, tmbd_data){
 
@@ -107,6 +110,7 @@
 					movie_description = fields.description;
 					movie_release  = fields.release;
 					tmbd_score = fields.tmdb_score;
+					top_tmbd_ids.push(fields.tmdb_id);
 				}
 			});
 		});
@@ -117,7 +121,7 @@
 
 		completeButtonArgs = onButtonArguments + ', \'' + String(movie_list.user_score) + '\', \'' + String(movie_list.review.replace('\'', '')) + '\'';
 
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filer_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review Details</button></div></div>'
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review Details</button></div></div>'
 
 		$('#top-10-list').append(list_string);
 	}
@@ -130,6 +134,7 @@
             }
         });
 
+		//Get Movie Data
 		$.ajax({
 			type: "GET",
 			url: '/GetMovieData',
@@ -148,9 +153,36 @@
 			},
 			dataType: "json",
 		});
+
 	};
 
+	//Auto Recommend Feature
+	function auto_recommend(id){
+		$.ajaxSetup({          
+            headers: {
+                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+            }
+        });
+
+		//Get all TMDB Id's
+		$.ajax({
+			type: "GET",
+			url: '/GetRecommended',
+			data: {
+				'user_id': id,
+			},
+			success: function(data) {
+			    console.log(data);
+			},
+			error: function(errorData) {
+				console.log(errorData);
+			},
+			dataType: "json",
+		});
+	}
+
 	get_movie_data({{Auth::user()->id}});
+	auto_recommend({{Auth::user()->id}});
 
 	//Send information to overlay
 	function overlay_on(title, img, description, release, tmbd_score, user_score, review) {

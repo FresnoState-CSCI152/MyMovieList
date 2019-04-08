@@ -55,4 +55,35 @@ class HomeController extends Controller
             'success' => true,
         ]);
     }
+
+    public function GetRecommended(Request $request) {
+        $user_id = request('user_id');
+        //Get All TMDB ids
+        $tmbd_ids = DB::table('movie_reviews')->select('tmdb_id')->get();
+        $all_tmdb_ids = array();
+        for ($i=0; $i < count($tmbd_ids) ; $i++) { 
+            array_push($all_tmdb_ids, $tmbd_ids[$i]->tmdb_id);
+        }
+        //select top 10 tmdb to get random recommended query
+        $movie_data = DB::table('movie_reviews')->
+                    select('tmdb_id')->
+                    where('user_id', $user_id)->
+                    orderby('user_score', 'desc')->
+                    limit(10)->get();
+        $randomInputIndex = rand(0, count($movie_data));
+        $reqString = "https://api.themoviedb.org/3/movie/".$movie_data[$randomInputIndex]->tmdb_id."/similar?api_key=".env("TMD_API_KEY","")."&language=en-US&page=2";
+        $json = json_decode(file_get_contents($reqString));
+        $results = $json->results;
+        $test = array();
+        $index = 0;
+        while(count($test) != 10 && $index < count($results)) {
+            if (!in_array($results[$index]->id, $all_tmdb_ids)) {
+                 array_push($test, $results[$index]);
+            }
+            $index++;
+        }
+        return response()->json([
+            'success' => $test
+        ]);
+    }
 }

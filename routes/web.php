@@ -28,6 +28,7 @@ Route::post('MovieReview', 'PageController@saveMovieReview');
 Route::post('EditReview', 'PageController@updateReview');
 Route::get('reviews/{userId}/{genre}', 'PageController@getReviewCards');
 Route::get('recommends/{userId}/{genre}', 'PageController@getRecommendCards');
+Route::get('GetRecommended', 'HomeController@GetRecommended');
 
 // Login and Register
 Auth::routes();
