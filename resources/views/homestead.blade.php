@@ -97,6 +97,7 @@
 {{-- Script --}}
 <script>
 	filter_num = 1;
+	tmbd_num = 0;
 	//change later
 	user_id = {{Auth::user()->id}};
 
@@ -136,6 +137,7 @@
 
 	//Fill recommended
 	function fill_my_recommended(movie_data) {
+		tmbd_num++;
 		movie_title = movie_data.title;
 		movie_img = movie_data.poster_path;
 		tmdb_score = movie_data.vote_average;
@@ -191,12 +193,12 @@
 	//Auto Recommend Feature
 	function auto_recommend(){
 		$('#recommended_from_tmdb').empty();
+		tmbd_num = 0;
 		$.ajaxSetup({          
             headers: {
                 "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
             }
         });
-
 		//Get all TMDB Id's
 		$.ajax({
 			type: "GET",
@@ -210,7 +212,7 @@
 			    });
 			},
 			error: function(errorData) {
-				console.log(errorData);
+				auto_recommend();
 			},
 			dataType: "json",
 		});
