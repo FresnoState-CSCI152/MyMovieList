@@ -71,19 +71,21 @@ class HomeController extends Controller
                     orderby('user_score', 'desc')->
                     limit(10)->get();
         $randomInputIndex = rand(0, count($movie_data));
+        //Query TMDB
         $reqString = "https://api.themoviedb.org/3/movie/".$movie_data[$randomInputIndex]->tmdb_id."/similar?api_key=".env("TMD_API_KEY","")."&language=en-US&page=2";
         $json = json_decode(file_get_contents($reqString));
         $results = $json->results;
-        $test = array();
+        //Filter and return results
+        $related_results = array();
         $index = 0;
-        while(count($test) != 10 && $index < count($results)) {
+        while(count($related_results) != 10 && $index < count($results)) {
             if (!in_array($results[$index]->id, $all_tmdb_ids)) {
-                 array_push($test, $results[$index]);
+                 array_push($related_results, $results[$index]);
             }
             $index++;
         }
         return response()->json([
-            'success' => $test
+            'success' => $related_results
         ]);
     }
 }

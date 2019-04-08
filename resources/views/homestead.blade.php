@@ -68,24 +68,25 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<div class="mx-auto" style="width: 25%;">
-				Your List
+			<div class="mx-auto" style="width: 50%;">
+				<b>Top of Your List</b>
 			</div>
 			<div id="top-10-list">
 			</div>
 		</div>
 		<div class="col">
 			<div class="mx-auto" style="width: 50%;">
-				Top Recommended
+				<b>Top Recommended</b>
 			</div>
 			<div id="top-recommended">
 			</div>
 		</div>
 		<div class="col">
-			<div class="mx-auto" style="width: 75%;">
-				Movies You May Enjoy
+			<div class="mx-auto" style="width: 50%;float:left;">
+				<b>Movies You May Enjoy</b>
 			</div>
-			<div id="top-from-tmdb">
+			<button class="btn btn-primary" onclick="auto_recommend()">Refresh</button>
+			<div id="recommended_from_tmdb">
 			</div>
 		</div>
 	</div>
@@ -94,8 +95,8 @@
 {{-- Script --}}
 <script>
 	filter_num = 1;
-	all_tmdb_ids = [];
-	top_tmbd_ids = [];
+	//change later
+	user_id = {{Auth::user()->id}};
 
 	//Top Ten List
 	function fill_my_top_ten(movie_list, tmbd_data){
@@ -110,7 +111,6 @@
 					movie_description = fields.description;
 					movie_release  = fields.release;
 					tmbd_score = fields.tmdb_score;
-					top_tmbd_ids.push(fields.tmdb_id);
 				}
 			});
 		});
@@ -121,13 +121,25 @@
 
 		completeButtonArgs = onButtonArguments + ', \'' + String(movie_list.user_score) + '\', \'' + String(movie_list.review.replace('\'', '')) + '\'';
 
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review Details</button></div></div>'
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review Details</button></div></div>';
 
 		$('#top-10-list').append(list_string);
 	}
 
+
+	//Fill recommended
+	function fill_my_recommended(movie_data) {
+		movie_title = movie_data.title;
+		movie_img = movie_data.poster_path;
+		tmdb_score = movie_data.vote_average;
+		completeButtonArgs = '';
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>TMDB Score: ' + tmdb_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review</button></div></div>';
+
+		$('#recommended_from_tmdb').append(list_string);
+	}
+
 	//Movie data from database
-	function get_movie_data(user_id) {
+	function get_movie_data() {
 		$.ajaxSetup({          
             headers: {
                 "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
@@ -142,8 +154,6 @@
 				'user_id': user_id,
 			},
 			success: function(data) {
-			    console.log(data.data);
-			    console.log(data.movie_data);
 			    data.data.forEach(function(obj){
 			    	fill_my_top_ten(obj, data.movie_data);
 			    });
@@ -157,7 +167,8 @@
 	};
 
 	//Auto Recommend Feature
-	function auto_recommend(id){
+	function auto_recommend(){
+		$('#recommended_from_tmdb').empty();
 		$.ajaxSetup({          
             headers: {
                 "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
@@ -169,10 +180,13 @@
 			type: "GET",
 			url: '/GetRecommended',
 			data: {
-				'user_id': id,
+				'user_id': user_id,
 			},
 			success: function(data) {
-			    console.log(data);
+			    data.success.forEach(function(obj){
+			    	console.log(obj);
+			    	fill_my_recommended(obj);
+			    });
 			},
 			error: function(errorData) {
 				console.log(errorData);
@@ -181,8 +195,8 @@
 		});
 	}
 
-	get_movie_data({{Auth::user()->id}});
-	auto_recommend({{Auth::user()->id}});
+	get_movie_data();
+	auto_recommend();
 
 	//Send information to overlay
 	function overlay_on(title, img, description, release, tmbd_score, user_score, review) {
