@@ -93,4 +93,37 @@ class HomeController extends Controller
             'success' => $related_results
         ]);
     }
+
+    public function GetUserRecommended(Request $request){
+        $user_id = request('user_id');
+        $genre = 'all_genres';
+        $recommends = DB::table('movie_reviews')
+            ->join('movie_data','movie_data.tmdb_id','=','movie_reviews.tmdb_id')
+            ->join('recommends', 'recommends.movie_review_id', '=', 'movie_reviews.id')
+            ->join('users', 'users.id', '=', 'recommends.recommender_id')
+            ->select(
+                'movie_reviews.id as movie_review_id',
+                'movie_reviews.user_id as reviewer_id',
+                'movie_reviews.user_score',
+                'movie_reviews.review',
+                'movie_reviews.tmdb_id',
+                'movie_data.tmdb_score',
+                'movie_data.title',
+                'movie_data.img_path',
+                'movie_data.release',
+                'movie_data.description',
+                'users.name as r_name',
+                'recommends.id as r_id'
+            )
+            ->orderBy('recommends.created_at', 'DESC')
+            ->where('recommends.recommendee_id', $user_id)
+            ->get();
+        if ($genre !== 'all_genres') {
+            $recommends = $recommends->where("movie_data.$genre", true);
+        }
+
+        return response()->json([
+            'success' => $recommends
+        ]);
+    }
 }

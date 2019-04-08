@@ -80,7 +80,7 @@
 			<div class="mx-auto" style="width: 50%;">
 				<b>Top Recommended</b>
 			</div>
-			<div id="top-recommended">
+			<div id="top_recommended">
 			</div>
 		</div>
 		<div class="col">
@@ -194,7 +194,7 @@
 	};
 
 	//Auto Recommend Feature
-	function auto_recommend(){
+	function auto_recommend() {
 		$('#recommended_from_tmdb').empty();
 		tmbd_num = 0;
 		$.ajaxSetup({          
@@ -216,6 +216,33 @@
 			},
 			error: function(errorData) {
 				auto_recommend();
+			},
+			dataType: "json",
+		});
+	}
+
+	//Get recommended Data
+	function recommended_data() {
+		$('#top_recommended').empty();
+		$.ajaxSetup({          
+            headers: {
+                "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+            }
+        });
+		//Get all TMDB Id's
+		$.ajax({
+			type: "GET",
+			url: '/GetUserRecommended',
+			data: {
+				'user_id': user_id,
+			},
+			success: function(data) {
+			    //data.success.forEach(function(obj){
+			    	console.log(data);
+			    //});
+			},
+			error: function(errorData) {
+				console.log(errorData);
 			},
 			dataType: "json",
 		});
@@ -244,8 +271,6 @@
 			'user_review': $('#submit_review_textarea').val()
 		}
 
-		console.log(movRevData);
-		console.log(movieDataSubmit);
 		$.ajax({
 			type: 'POST',
 			url: '/MovieReview',
@@ -254,6 +279,8 @@
 					if (data['success']) {
 						//If submission successful, refresh screen data;
 						filter_num = 1
+						description_string = [];
+						movdata = [];
 						overlay_off();
 						get_movie_data();
 						auto_recommend();
@@ -278,6 +305,7 @@
 
 	get_movie_data();
 	auto_recommend();
+	recommended_data();
 
 	//Send information to overlay
 	function overlay_on(tmdb_id, title, img, release, tmbd_score, user_score, review, submitting) {
