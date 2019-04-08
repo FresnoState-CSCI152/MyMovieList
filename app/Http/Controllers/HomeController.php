@@ -115,7 +115,7 @@ class HomeController extends Controller
                 'users.name as r_name',
                 'recommends.id as r_id'
             )
-            ->orderBy('recommends.created_at', 'DESC')
+            ->orderBy('movie_data.tmdb_score', 'DESC')
             ->where('recommends.recommendee_id', $user_id)
             ->get();
         if ($genre !== 'all_genres') {

@@ -98,8 +98,11 @@
 <script>
 	filter_num = 1;
 	tmbd_num = 0;
+	r_num = 0;
 	//change later
 	user_id = {{Auth::user()->id}};
+	cur_r_id = 0;
+	r_tmdb_id = 0;
 
 	//Send for review
 	var movRevData = {};
@@ -134,6 +137,22 @@
 		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', false)">Review Details</button></div></div>';
 
 		$('#top-10-list').append(list_string);
+	}
+
+	//Fill user_recommended
+	function fill_user_recommended(movie_data) {
+		r_num++;
+		movie_title = movie_data.title;
+		movie_img = movie_data.img_path;
+		tmdb_score = movie_data.tmdb_score;
+		release_date = movie_data.release;
+		description_string.push({'id': movie_data.tmdb_id, 'description': movie_data.description,});
+
+		//title, img, description, release, tmbd_score, user_score, review,
+		completeButtonArgs = movie_data.tmdb_id + ',\'' + String(movie_title) + '\', \'' + movie_img + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'0\',\'placeholder\', true, ' + movie_data.r_id;
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p>Recommended by <b>' + movie_data.r_name + '<b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review</button></div></div>';
+
+		$('#top_recommended').append(list_string);
 	}
 
 
@@ -237,12 +256,12 @@
 				'user_id': user_id,
 			},
 			success: function(data) {
-			    //data.success.forEach(function(obj){
-			    	console.log(data);
-			    //});
+			    data.success.forEach(function(obj){
+			    	fill_user_recommended(obj);
+			    });
 			},
 			error: function(errorData) {
-				console.log(errorData);
+				recommended_data();
 			},
 			dataType: "json",
 		});
@@ -250,7 +269,7 @@
 
 	//Submit Review Information
 	function confirmReview(){
-
+		movRevData = {};
 		$.ajaxSetup({          
             headers: {
                 "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
@@ -264,13 +283,24 @@
 			}
 		})
 
-		movRevData = {
-			'user_id': user_id,
-			'tmdb_id': movieDataSubmit.tmdb_id,
-			'user_score': $('#starRating_for_review').val(),
-			'user_review': $('#submit_review_textarea').val()
+		if (cur_r_id != 0) {
+			movRevData = {
+				'user_id': user_id,
+				'tmdb_id': r_tmdb_id,
+				'user_score': $('#starRating_for_review').val(),
+				'user_review': $('#submit_review_textarea').val(),
+				'r_id': cur_r_id,
+			}
+		} else {
+			movRevData = {
+				'user_id': user_id,
+				'tmdb_id': movieDataSubmit.tmdb_id,
+				'user_score': $('#starRating_for_review').val(),
+				'user_review': $('#submit_review_textarea').val()
+			}
 		}
 
+		console.log(movRevData);
 		$.ajax({
 			type: 'POST',
 			url: '/MovieReview',
@@ -278,12 +308,15 @@
 			success: function (data) {
 					if (data['success']) {
 						//If submission successful, refresh screen data;
-						filter_num = 1
+						filter_num = 1;
+						r_num = 1;
+						cur_r_id = 0;
 						description_string = [];
 						movdata = [];
 						overlay_off();
 						get_movie_data();
 						auto_recommend();
+						recommended_data();
 					}
 				},
 			error: function() { 
@@ -308,9 +341,11 @@
 	recommended_data();
 
 	//Send information to overlay
-	function overlay_on(tmdb_id, title, img, release, tmbd_score, user_score, review, submitting) {
+	function overlay_on(tmdb_id, title, img, release, tmbd_score, user_score, review, submitting, r_id = 0) {
+		cur_r_id = r_id;
 		current_title = title;
 		description = '';
+		r_tmdb_id = tmdb_id;
 		description_string.forEach(function(obj){
 			if(obj.id == tmdb_id){
 				description = obj.description;
