@@ -72,7 +72,12 @@ class HomeController extends Controller
                     limit(10)->get();
         $randomInputIndex = rand(0, count($movie_data));
         //Query TMDB
-        $reqString = "https://api.themoviedb.org/3/movie/".$movie_data[$randomInputIndex]->tmdb_id."/similar?api_key=".env("TMD_API_KEY","")."&language=en-US&page=2";
+        $reqString = '';
+        if(count($movie_data) == 0) {
+            $reqString = "https://api.themoviedb.org/3/movie/top_rated?api_key=".env("TMD_API_KEY","")."&language=en-US&page=1";
+        } else {
+            $reqString = "https://api.themoviedb.org/3/movie/".$movie_data[$randomInputIndex]->tmdb_id."/recommendations?api_key=".env("TMD_API_KEY","")."&language=en-US&page=2";
+        }
         $json = json_decode(file_get_contents($reqString));
         $results = $json->results;
         //Filter and return results

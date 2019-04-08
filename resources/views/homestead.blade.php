@@ -105,6 +105,7 @@
 	var movRevData = {};
 	var movdata = [];
 	var current_title = '';
+	var description_string = [];
 
 	//Top Ten List
 	function fill_my_top_ten(movie_list, tmbd_data){
@@ -119,13 +120,14 @@
 					movie_description = fields.description;
 					movie_release  = fields.release;
 					tmbd_score = fields.tmdb_score;
+					description_string.push({'id': fields.tmdb_id, 'description': movie_description,});
 				}
 			});
 		});
 
 		//Arguments to send for overlay
 
-		onButtonArguments = '\'' + String(movie_title) + '\', \'' +  String(movie_img) + '\', \'' + String(movie_description.replace('\'', '')) + '\', \'' + String(movie_release) + '\', \'' + String(tmbd_score) + '\'';
+		onButtonArguments =  movie_list.tmdb_id + ',\'' + String(movie_title) + '\', \'' +  String(movie_img) + '\', \'' + String(movie_release) + '\', \'' + String(tmbd_score) + '\'';
 
 		completeButtonArgs = onButtonArguments + ', \'' + String(movie_list.user_score) + '\', \'' + String(movie_list.review.replace('\'', '')) + '\'';
 
@@ -153,9 +155,10 @@
 			'description': movie_data.overview,
 			'genre_ids': movie_data.genre_ids,
 		});
+		description_string.push({'id': movie_data.id, 'description': movie_data.overview,});
 
 		//title, img, description, release, tmbd_score, user_score, review,
-		completeButtonArgs = '\'' + String(movie_title) + '\', \'' + movie_img + '\',\'' + String(movie_data.overview.replace('\'', '')) + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'0\',\'placeholder\'';
+		completeButtonArgs = movie_data.id + ',\'' + String(movie_title) + '\', \'' + movie_img + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'0\',\'placeholder\'';
 		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>TMDB Score: ' + tmdb_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', true)">Review</button></div></div>';
 
 		$('#recommended_from_tmdb').append(list_string);
@@ -277,8 +280,14 @@
 	auto_recommend();
 
 	//Send information to overlay
-	function overlay_on(title, img, description, release, tmbd_score, user_score, review, submitting) {
+	function overlay_on(tmdb_id, title, img, release, tmbd_score, user_score, review, submitting) {
 		current_title = title;
+		description = '';
+		description_string.forEach(function(obj){
+			if(obj.id == tmdb_id){
+				description = obj.description;
+			}
+		})
 		$("#overlay").css('display', 'block');
   		$("#movie_image").attr("src",'http://image.tmdb.org/t/p/w200' + img);
   		$("#review_title").text(title);
