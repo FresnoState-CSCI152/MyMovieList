@@ -44,8 +44,8 @@
 	<table class='table table-bordered' style='color: white; background-color: rgba(0,0,0,1)'>
 	    <thead>
 	    <tr>
-	        <th scope='col' style='width: 12%;'>My Score</th>
-	        <th scope='col'>My Review</th>
+	        <th id="th_score" scope='col' style='width: 12%;'>Your Score</th>
+	        <th id="th_review" scope='col'>Your Review</th>
 	    </tr>
 	    </thead>
 	    <tbody>
@@ -96,14 +96,14 @@
      
 {{-- Script --}}
 <script>
-	filter_num = 1;
-	tmbd_num = 0;
-	r_num = 0;
 	//change later
 	user_id = {{Auth::user()->id}};
 	cur_r_id = 0;
 	r_tmdb_id = 0;
-
+	filter_num = 1;
+	tmbd_num = 0;
+	r_num = 0;
+	r_name = '';
 	//Send for review
 	var movRevData = {};
 	var movdata = [];
@@ -128,7 +128,7 @@
 			});
 		});
 
-		//Arguments to send for overlay
+		//Arguments to send for overlay_on
 
 		onButtonArguments =  movie_list.tmdb_id + ',\'' + String(movie_title) + '\', \'' +  String(movie_img) + '\', \'' + String(movie_release) + '\', \'' + String(tmbd_score) + '\'';
 
@@ -147,10 +147,11 @@
 		tmdb_score = movie_data.tmdb_score;
 		release_date = movie_data.release;
 		description_string.push({'id': movie_data.tmdb_id, 'description': movie_data.description,});
+		r_name = movie_data.r_name;
 
 		//title, img, description, release, tmbd_score, user_score, review,
-		completeButtonArgs = movie_data.tmdb_id + ',\'' + String(movie_title) + '\', \'' + movie_img + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'0\',\'placeholder\', true, ' + movie_data.r_id;
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p>Recommended by <b>' + movie_data.r_name + '<b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review</button></div></div>';
+		completeButtonArgs = movie_data.tmdb_id + ',\'' + String(movie_title) + '\', \'' + movie_img + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'' + movie_data. user_score + '\',\'' + movie_data.review + '\', true, ' + movie_data.r_id;
+		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p>Recommended by <b>' + movie_data.r_name + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review</button></div></div>';
 
 		$('#top_recommended').append(list_string);
 	}
@@ -300,7 +301,6 @@
 			}
 		}
 
-		console.log(movRevData);
 		$.ajax({
 			type: 'POST',
 			url: '/MovieReview',
@@ -365,13 +365,21 @@
   			$('#starRating_for_review').show();
   			$('#submit_review_textarea').show();
   			$('#submit_review_textarea').val('');
-  			$('#my_review_table').hide();
+  			if(r_id != 0) {
+  				$('#my_review_table').show();
+  				$('#th_review').text(r_name + '\'s review');
+  				$('#th_score').text(r_name + '\' score');
+  			} else {
+  				$('#my_review_table').hide();
+  			}
   		} else {
   			$('#overlay_button_submit').hide();
   			$('#overlay_button_home').show();
   			$('#starRating_for_review').hide();
   			$('#submit_review_textarea').hide();
   			$('#my_review_table').show();
+   			$('#th_review').text('Your review');
+  			$('#th_score').text('Your score');
   		}
 	}
 
