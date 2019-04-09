@@ -35,6 +35,11 @@ class PageController extends Controller
         'western',
     ];
 
+    private const VALID_SORT_TYPES = [
+        'desc',
+        'asc',
+    ];
+
 	public function home()
 	{
 		if (Auth::check())
@@ -95,7 +100,7 @@ class PageController extends Controller
     }
 
     // Get the movies that a given user has reviewed, optionally filtered by genre
-    private function userReviews($userId, $genre = 'all_genres')
+    private function userReviews($userId, $genre = 'all_genres', $sortUserScore = 'desc')
     {
         $reviews = DB::table('movie_reviews')
             ->join('movie_data','movie_data.tmdb_id','=','movie_reviews.tmdb_id')
@@ -111,7 +116,7 @@ class PageController extends Controller
                 'movie_data.description'
             )
             ->where('movie_reviews.user_id', $userId)
-            ->orderBy('movie_reviews.user_score', 'DESC');
+            ->orderBy('movie_reviews.user_score', $sortUserScore);
         if ($genre !== 'all_genres') {
             $reviews = $reviews->where("movie_data.$genre", true);
         }
@@ -119,7 +124,7 @@ class PageController extends Controller
     }
 
     // Get the movies that a given user been recommended, optionally filtered by genre
-    private function userRecommends($userId, $genre = 'all_genres')
+    private function userRecommends($userId, $genre = 'all_genres', $sortCreationDate = 'desc')
     {
         $recommends = DB::table('movie_reviews')
             ->join('movie_data','movie_data.tmdb_id','=','movie_reviews.tmdb_id')
@@ -138,7 +143,7 @@ class PageController extends Controller
                 'recommends.created_at',
                 'recommends.id as r_id'
             )
-            ->orderBy('recommends.created_at', 'DESC')
+            ->orderBy('recommends.created_at', $sortCreationDate)
             ->where('recommends.recommendee_id', $userId);
         if ($genre !== 'all_genres') {
             $recommends = $recommends->where("movie_data.$genre", true);
@@ -147,7 +152,7 @@ class PageController extends Controller
     }
 
     // Return the html of a given user's movies, filtered by genre
-    public function getReviewCards($userId, $genre) {
+    public function getReviewCards(Request $request) {
         $this->validate(request(), [
             'userId' => [
                 'bail',
@@ -161,10 +166,21 @@ class PageController extends Controller
                     }
                 },
             ],
+            'sortUserScore' => [
+                'bail',
+                function ($attribute, $value, $fail) {
+                    if (!in_array($value, self::VALID_SORT_TYPES)) {
+                        $fail("Not a valid sort type");
+                    }
+                },
+            ],
         ]);
+        $userId = $request->input('userId');
+        $genre = $request->input('genre');
+        $sortUserScore = $request->input('sortUserScore');
 
         $friends = \App\User::find($userId)->friends()->get();
-        $reviews = $this->userReviews($userId, $genre);
+        $reviews = $this->userReviews($userId, $genre, $sortUserScore);
 
         $reviewCardsHtml = view('home/review-cards')
             ->with(compact('reviews', 'userId', 'friends'))
@@ -173,7 +189,7 @@ class PageController extends Controller
     }
 
     // Return the html of a given user's recommended movies, filtered by genre
-    public function getRecommendCards($userId, $genre) {
+    public function getRecommendCards(Request $request) {
         $this->validate(request(), [
             'userId' => [
                 'bail',
@@ -187,10 +203,21 @@ class PageController extends Controller
                     }
                 },
             ],
+            'sortCreationDate' => [
+                'bail',
+                function ($attribute, $value, $fail) {
+                    if (!in_array($value, self::VALID_SORT_TYPES)) {
+                        $fail("Not a valid sort type");
+                    }
+                },
+            ],
         ]);
+        $userId = $request->input('userId');
+        $genre = $request->input('genre');
+        $sortCreationDate = $request->input('sortCreationDate');
 
         $friends = \App\User::find($userId)->friends()->get();
-        $recommends = $this->userRecommends($userId, $genre);
+        $recommends = $this->userRecommends($userId, $genre, $sortCreationDate);
 
         $recommendCardsHtml = view('home/recommend-cards')
             ->with(compact('recommends', 'userId', 'friends'))
