@@ -57,7 +57,7 @@
 	</table>
 	</div>{{--/my_reivew_table--}}
 
-	<button id="overlay_button_home" class="btn btn-primary" onclick="location.href='home';">Go To Full List</button>
+	<button id="overlay_button_home" class="btn btn-primary" onclick="location.href='movies';">Go To Full List</button>
 	<button id="overlay_button_submit" class="btn btn-primary" onclick="confirmReview()">Submit</button>
 	<button class="btn btn-danger" onclick="overlay_off()">Cancel</button>
 
