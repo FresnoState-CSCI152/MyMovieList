@@ -26,8 +26,8 @@ Route::post('TMBD', 'PageController@getTMDBjson');
 Route::post('TMBDdat', 'PageController@saveMovieData');
 Route::post('MovieReview', 'PageController@saveMovieReview');
 Route::post('EditReview', 'PageController@updateReview');
-Route::get('reviews/{userId}/{genre}', 'PageController@getReviewCards');
-Route::get('recommends/{userId}/{genre}', 'PageController@getRecommendCards');
+Route::get('reviews', 'PageController@getReviewCards');
+Route::get('recommends', 'PageController@getRecommendCards');
 Route::get('GetRecommended', 'HomeController@GetRecommended');
 Route::get('GetUserRecommended', 'HomeController@GetUserRecommended');
 
