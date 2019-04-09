@@ -84,10 +84,9 @@
 			</div>
 		</div>
 		<div class="col">
-			<div class="mx-auto" style="width: 50%;float:left;">
-				<b>Movies You May Enjoy</b>
+			<div class="mx-auto">
+				<b onclick="auto_recommend()">Movies You May Enjoy (Click to Refresh)</b>
 			</div>
-			<button class="btn btn-primary" onclick="auto_recommend()">Refresh</button>
 			<div id="recommended_from_tmdb">
 			</div>
 		</div>

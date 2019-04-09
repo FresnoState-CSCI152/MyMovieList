@@ -12,7 +12,7 @@
 /*Route::get('/', function () {
     return view('home');
 })->name('home');*/
-Route::get('/', 'PageController@home');
+Route::get('/', 'HomeController@index');
 Route::get('home','PageController@home');
 Route::get('about','PageController@about');
 Route::get('account','PageController@account');
