@@ -22,4 +22,5 @@
         <option value="war">War</option>
         <option value="western">Western</option>
     </select>
+    <button class="btn btn-primary mt-2" id="genre-select-menu-button_{{$label}}" type="button" disabled>Filter</button>
 </div>
