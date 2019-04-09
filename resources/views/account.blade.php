@@ -46,58 +46,65 @@
 	<!-- Display user Information -->
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6">
-			<h4><strong>User Info</strong></h4>
-				<div class="col-sm-4">
-				</div>
+			<div class="col-sm-4">
+				<h3>User Information</h3>
+					<div class="row">
+						<div class="col-xs-1" id="userInfo">
+							<p>Email: {{$user->email}}</p>
+							<p>Gender: {{$user->gender}}</p>
+							<p>Birthday: {{$user->birthday}}</p>
+							<p>Location: {{$user->location}}</p>
+							<button class="btn" onclick="updateUserInfo()">Edit</button>
+						</div>
+
+							<div class="col-sm-4" id="userForm" style="display: none">
+								<form method="POST" action="/profile">
+									<label>Gender</label>
+									<select name="gender">
+										<option value="-">-</option>
+										<option value="male">Male</option>
+										<option value="female">Female</opion>
+									</select>
+									<label>BirthDay</label>
+									<input type="text" name="birthday">
+									<label>Location</label>
+									<input type="text" name="location">
+									<input type="hidden" name="_token" value="{{ csrf_token() }}">
+									<button type ="submit" class="button">Update</button>
+								</form>
+							</div>
+			</div>
+			</div>
+
+			<div class="col-sm-4">
+				<h3>About Me</h3>
 
 				<div class="row">
-					<div class="col-xs-1" id='infoTitles'>
-						<p>Email:</p>
-						<p>Gender:</p>
-						<p>Birthday:</p>
-						<p>Location:</p>
-					</div>
-					<div class="col-xs-2" id='userInfo'>
-						<p>{{$user->email}}</p>
-						<p>{{$user->gender}}</p>
-						<p>{{$user->birthday}}</p>
-						<p>{{$user->location}}</p>
+					<div class="col-sm-4" id="currentAboutMe">
+						<p>{{$user->about_me}}</p>
+						<button class="button" onclick="showAboutMe()">Edit</button>
 					</div>
 
-					<!-- Dropdown menu to select user Gender -->
-					<div class="col-xs-s">
-						<form action="/profile">
-							<select name="Gender">
-								<option value="Male">Male</option>
-								<option value="Female">Female</option>
-								<option value="-">-</option>
-							</select>
-							<br><br>
+
+					<div class="col-sm-4" id="updateAboutMe" style="display: none;">
+						<form action="/profile" method="POST">
+							<textarea name ="about_me" class="form-control" rows=5 style="width:300px"></textarea>
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<button class="button" type="submit">Update</button>
 						</form>
 					</div>
 				</div>
-
-				<div class="row">
-					<button class="button" onclick="showEditForm()">Edit</button>
-				</div>
 			</div>
-
-			<div class="col-sm-6">
-				<h4><strong>About me</strong></h4>
+			<div class="col-sm-4">
+				<h3>Settings</h3>
 					<div class="row">
-						<div class="col-xs-4">
-							<p>{{$user->about_me}}</p>
-					 	</div>
-
-					 	<div class="row">
-					 		<button class="button">Edit</button>
-					 	</div>
+						<div class="col-sm-4">
+							<a href="#">ChangePassword</a>
+						</div>
 					</div>
 			</div>
-		</div>
+	    </div>
 	</div>
-
 	<!--
 	<div class ="container">
 		<div class="row">
@@ -116,12 +123,22 @@ function showImageForm()
 	editBtn.hide();
 }
 
-function showEditForm()
+function updateUserInfo()
 {
-	var userInfo1 = $('#infoTitles');
-	var userInfo2 = $('#userInfo')
-	userInfo1.hide();
-	userInfo2.hide();
+	var showUserForm = $('#userForm');
+	var currentUserInfo = $('#userInfo');
+
+	currentUserInfo.hide();
+	showUserForm.show();
+}
+
+function showAboutMe()
+{
+	var updateForm = $('#updateAboutMe');
+	var currentInfo = $('#currentAboutMe');
+
+	currentInfo.hide();
+	updateForm.show();
 }
 </script>
 @endsection
