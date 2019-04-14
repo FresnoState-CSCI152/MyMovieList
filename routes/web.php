@@ -39,9 +39,12 @@ Route::post('friends/create', 'FriendsController@createFriendship')->middleware(
 Route::post('friends/declinerequest', 'FriendsController@declineFriendRequest')->middleware('auth');
 Route::post('friends/delete', 'FriendsController@deleteFriendship')->middleware('auth');
 
-// User functionality
+// User functionality'
 Route:: get('profile', 'UserController@profile');
-Route:: post('profile', 'UserController@update_avatar');
+Route:: post('profile/update_avatar/{id}', 'UserController@update_avatar')->name('update_avatar');
+Route:: post('profile/update_personal_info/{id}', 'UserController@update_personal_info')->name('update_personal_info');
+Route:: post('profile/update_about_me/{id}', 'UserController@update_about_me')->name('update_about_me');
+Route:: get('profile', 'UserController@getAboutMe');
 
 // Discussion and Comments functionality
 
