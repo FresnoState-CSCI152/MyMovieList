@@ -41,10 +41,10 @@ Route::post('friends/delete', 'FriendsController@deleteFriendship')->middleware(
 
 // User functionality'
 Route:: get('profile', 'UserController@profile');
+Route:: get('profile/get_about_me', 'UserController@getAboutMe');
 Route:: post('profile/update_avatar/{id}', 'UserController@update_avatar')->name('update_avatar');
 Route:: post('profile/update_personal_info/{id}', 'UserController@update_personal_info')->name('update_personal_info');
 Route:: post('profile/update_about_me/{id}', 'UserController@update_about_me')->name('update_about_me');
-Route:: get('profile', 'UserController@getAboutMe');
 
 // Discussion and Comments functionality
 

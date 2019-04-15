@@ -92,7 +92,7 @@
 					<div class="col-sm-4" id="updateAboutMe" style="display: none;">
 						<form action="{{route('update_about_me',Auth::user()->id)}}" method="POST">
 							{{csrf_field()}}
-							<textarea name ="about_me" id="txtArea" class="form-control" rows=5 style="width:300px"></textarea>
+							<textarea name ="about_me" id="aboutMeText" class="form-control" rows=5 style="width:300px"></textarea>
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 							<button class="button" type="submit" name="aboutMeForm">Update</button>
 						</form>
@@ -149,19 +149,24 @@ function showAboutMe()
 
 function loadAboutMe()
 {
+	$.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
+
 	var aboutMe = "";
 	$.ajax({type:"GET",
-		    url:"/Profile.php",
-			data : aboutMe,
+		    url: "/profile/get_about_me",
+			data : {aboutMe:aboutMe},
 			success : function(aboutMe){
-				alert('success');
+				document.getElementById("aboutMeText").innerHTML = aboutMe;
 			},
-			error : function(){
-				alert('failure');
+			error : function(errorData){
+				console.log(errorData);
 			},
-			dataType : "json",
+			dataType : "text",
 		});
-
 }
 
 function loadPersonalInfo()

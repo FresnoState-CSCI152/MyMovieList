@@ -74,8 +74,8 @@ class UserController extends Controller
             return view('account', array('user' => Auth::user()) );
         }
 
-    public function getAboutMe()
-    {
+    public function getAboutMe(Request $request){
+        $user = Auth::user();
         return $user->about_me;
     }
 
