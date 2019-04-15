@@ -12,20 +12,24 @@
 /*Route::get('/', function () {
     return view('home');
 })->name('home');*/
-Route::get('/', 'PageController@home');
-Route::get('home','PageController@home');
+Route::get('/', 'HomeController@index');
+Route::get('movies','PageController@home');
 Route::get('about','PageController@about');
 Route::get('account','PageController@account');
 Route::get('public/{publicId}', 'PageController@publicProfile');
+Route::get('homestead', 'HomeController@index');
 
 // Search get and post methods
 Route::get('search', 'PageController@search');
+Route::get('GetMovieData', 'HomeController@GetMovieData');
 Route::post('TMBD', 'PageController@getTMDBjson');
 Route::post('TMBDdat', 'PageController@saveMovieData');
 Route::post('MovieReview', 'PageController@saveMovieReview');
 Route::post('EditReview', 'PageController@updateReview');
-Route::get('reviews/{userId}/{genre}', 'PageController@getReviewCards');
-Route::get('recommends/{userId}/{genre}', 'PageController@getRecommendCards');
+Route::get('reviews', 'PageController@getReviewCards');
+Route::get('recommends', 'PageController@getRecommendCards');
+Route::get('GetRecommended', 'HomeController@GetRecommended');
+Route::get('GetUserRecommended', 'HomeController@GetUserRecommended');
 
 // Login and Register
 Auth::routes();
