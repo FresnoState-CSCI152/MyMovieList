@@ -53,12 +53,12 @@
 						<div class="col-xs-1" id="userInfo">
 							<p>Email: {{$user->email}}</p>
 							<p>Gender: {{$user->gender}}</p>
-							<p>Birthday: {{$user->birthday}}</p>
+							<p>Birthday: {{$user->birth_month}}/{{$user->birth_day}}/{{$user->birth_year}}</p>
 							<p>Location: {{$user->location}}</p>
 							<button class="button" onclick="updateUserInfo()">Edit</button>
 						</div>
 
-							<div class="col-sm-4" id="userForm" style="display: none">
+							<div class="col-sm-6" id="userForm" style="display: none">
 								<form method="POST" action="{{route('update_personal_info',Auth::user()->id)}}">
 									{{csrf_field()}}
 									<label for="gender">Gender</label>
@@ -67,10 +67,22 @@
 										<option value="male">Male</option>
 										<option value="female">Female</opion>
 									</select>
-									<label for="birthday">BirthDay</label>
-									<input type="text" name="birthday">
+									<label for="Month">Month</label>
+									<label for="Day">Day</label>
+									<label for="Year">Year</label>
+									<div class="row">
+										<div class="col-sm-3">
+									<input id="b_month" type="text" name="b_month" style="width:23px;">
+										</div>
+									<div class="col-sm-2">
+									<input id="b_day" type="text" name="b_day" style="width:23px;">
+								    </div>
+									<div class="col-sm-4">
+									<input id="b_year" type="text" name="b_year" style="width:40px;">
+										</div>
+									</div>
 									<label for="location">Location</label>
-									<input type="text" name="location">
+									<input id="local" type="text" name="location">
 									<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									<button type ="submit" name = "userForm" class="button">Update</button>
 								</form>
@@ -135,6 +147,7 @@ function updateUserInfo()
 
 	currentUserInfo.hide();
 	showUserForm.show();
+	loadPersonalInfo();
 }
 
 function showAboutMe()
@@ -171,8 +184,36 @@ function loadAboutMe()
 
 function loadPersonalInfo()
 {
+	$.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
 
+	var day, month, year, location;
+	var userInfo = {
+		'day':day,
+		'month':month,
+		'year':year,
+		'local':location 
+	}
+	$.ajax({type:"GET",
+		    url: "/profile/get_user_info",
+			data : userInfo,
+			success : function(userInfo){
+				document.getElementById("b_day").value = userInfo.day;
+				document.getElementById("b_month").value = userInfo.month;
+				document.getElementById("b_year").value = userInfo.year;
+				document.getElementById("local").value = userInfo.local;
+				},
+			error : function(errorData){
+				console.log(errorData);
+				alert('error');
+			},
+			dataType : "json",
+		});
 }
+
 
 </script>
 @endsection

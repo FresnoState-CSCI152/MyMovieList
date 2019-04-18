@@ -33,17 +33,14 @@ class UserController extends Controller
     public function update_personal_info(Request $request, $id)
     {
             $location = "";
-            $birthday = "";
             $gender = "";
+            $b_month;
+            $b_day;
+            $b_year;
 
             if(!empty($request->gender))
             {
                 $gender = $request->gender;
-            }
-
-            if (!empty($request->birthday))
-            {
-                $birthday = $request->birthday;
             }
 
             if (!empty($request->location))
@@ -54,7 +51,9 @@ class UserController extends Controller
             $user = Auth::user();
             $user->gender = $gender;
             $user->location = $location;
-            $user->birthday = $birthday;
+            $user->birth_day = $request->b_day;
+            $user->birth_month = $request->b_month;
+            $user->birth_year = $request->b_year;
             $user->save();
             return view('account', array('user' => Auth::user()) );
     }
@@ -77,6 +76,14 @@ class UserController extends Controller
     public function getAboutMe(Request $request){
         $user = Auth::user();
         return $user->about_me;
+    }
+
+    public function getUserInfo(Request $request){
+        $user = Auth::user();
+
+        $userInfo = array("month"=>$user->birth_month, "day"=>$user->birth_day, "year"=>$user->birth_year, "local"=>$user->location);
+
+        return $userInfo;
     }
 
 }
