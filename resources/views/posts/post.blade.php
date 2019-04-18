@@ -18,5 +18,12 @@
 	
 	
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+	{{ html_entity_decode(strip_tags($post->body)) }}
+=======
+>>>>>>> master
+=======
+>>>>>>> master
 </div>
 <hr>
