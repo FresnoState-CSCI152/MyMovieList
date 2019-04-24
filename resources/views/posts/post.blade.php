@@ -14,16 +14,6 @@
 	</div>
 	
 	{{ html_entity_decode(strip_tags(str_limit($post->body))) }} 
-	<!--{{ str_limit($post->body) }} string limit has add to the line above line 16--> 
-	
-	
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-	{{ html_entity_decode(strip_tags($post->body)) }}
-=======
->>>>>>> master
-=======
->>>>>>> master
+	<!--{{ str_limit($post->body) }} string limit has add to the line above line 16--> 	
 </div>
 <hr>
