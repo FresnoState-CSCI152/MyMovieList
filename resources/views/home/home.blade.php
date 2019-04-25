@@ -44,7 +44,7 @@
                   <div class="container text-white">
                     <h1 class="display-4">Welcome to MyMovieList!</h1>
                     <p class="lead">Social media for movie lovers.</p>
-                    <hr class="my-4 bg-white">
+                    <hr class="my-4 bg-light">
                     <p>Please register or login!</p>
                   </div>
                 </div>
