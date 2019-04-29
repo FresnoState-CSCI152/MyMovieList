@@ -24,7 +24,7 @@
             						&nbsp; ⁝ &nbsp;
             						{{ $post->created_at->tz('America/Los_Angeles')->toDayDateTimeString() }}</h6>
             					</div>
-            				</div>
+            				</div>             
 
             			</div>
                 		<div class="card-body">
@@ -62,9 +62,10 @@
             						</h6>
             					</div>
             				</div>
+
             			</div>	
                 		<div class="card-body">
-							{{ $comment->body }}
+							{!! $comment->body!!}
 						</div>
 					</div>
 				</div>
@@ -82,7 +83,7 @@
 				<form method="POST" action="/discussion/{{ $post->id }}/comments">
 					{{ csrf_field() }}
 					<div class="form-group">
-						<textarea name="body" placeholder="Your comment here." class="form-control" required></textarea>
+						<textarea id="body" name="body" placeholder="Your comment here." class="form-control" required></textarea>
 					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-primary">Add Comment</button>
