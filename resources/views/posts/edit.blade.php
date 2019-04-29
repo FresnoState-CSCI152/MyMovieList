@@ -31,7 +31,8 @@
 		{{method_field('DELETE')}}
 		{{csrf_field()}}
 		<div class="form-group">
-				<button type="submit" class="btn btn-danger">Delete Post</button>
+				<button type="submit" onclick="return confirm('Are you sure you want to delete this item?');" class="btn btn-danger">Delete Post</button>
+				
 		</div>
 	</form>
 </div>
