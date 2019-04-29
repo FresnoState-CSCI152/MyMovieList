@@ -26,6 +26,7 @@
 
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary">Post</button>
+				<a class="btn btn-primary" href="/discussion" role="button">Cancel</a>
 			</div>
 
 			@include('errors/errors')
