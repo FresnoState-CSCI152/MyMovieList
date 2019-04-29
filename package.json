@@ -21,6 +21,8 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "codemirror": "^5.43.0"
+        "codemirror": "^5.43.0",
+        "laravel-echo": "^1.5.3",
+        "pusher-js": "^4.4.0"
     }
 }

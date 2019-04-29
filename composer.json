@@ -11,7 +11,8 @@
         "guzzlehttp/guzzle": "^6.2",
         "intervention/image": "dev-master",
         "laravel/framework": "5.7.*",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "pusher/pusher-php-server": "^3.4"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
