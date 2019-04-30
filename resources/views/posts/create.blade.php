@@ -1,5 +1,7 @@
 @extends ('templates/master')
 
+
+
 @section ('content')
 
 	<div class="col-sm-8">
@@ -14,7 +16,7 @@
 
 			<div class="form-group">
 				<label for="title">Title:</label>
-				<input type="text" id="title" name="title" class="form-control" required>
+				<input type="text" id="title" name="title" class="form-control" placeholder="Title" required>
 			</div>
 
 			<div class="form-group">
@@ -22,16 +24,13 @@
 				<textarea id="body" name="body" class="form-control" required></textarea>
 			</div>
 
-			<hr>
-
 			<div class="form-group">
 				<button type="submit" class="btn btn-primary">Post</button>
+				<a class="btn btn-primary" href="/discussion" role="button">Cancel</a>
 			</div>
 
 			@include('errors/errors')
-
 		</form>
-
 	</div>
 
 @endsection

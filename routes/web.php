@@ -12,18 +12,24 @@
 /*Route::get('/', function () {
     return view('home');
 })->name('home');*/
-Route::get('/', 'PageController@home');
-Route::get('home','PageController@home');
+Route::get('/', 'HomeController@index');
+Route::get('movies','PageController@home');
 Route::get('about','PageController@about');
 Route::get('account','PageController@account');
 Route::get('public/{publicId}', 'PageController@publicProfile');
+Route::get('homestead', 'HomeController@index');
 
 // Search get and post methods
 Route::get('search', 'PageController@search');
+Route::get('GetMovieData', 'HomeController@GetMovieData');
 Route::post('TMBD', 'PageController@getTMDBjson');
 Route::post('TMBDdat', 'PageController@saveMovieData');
 Route::post('MovieReview', 'PageController@saveMovieReview');
 Route::post('EditReview', 'PageController@updateReview');
+Route::get('reviews', 'PageController@getReviewCards');
+Route::get('recommends', 'PageController@getRecommendCards');
+Route::get('GetRecommended', 'HomeController@GetRecommended');
+Route::get('GetUserRecommended', 'HomeController@GetUserRecommended');
 
 // Login and Register
 Auth::routes();
@@ -37,16 +43,25 @@ Route::post('friends/create', 'FriendsController@createFriendship')->middleware(
 Route::post('friends/declinerequest', 'FriendsController@declineFriendRequest')->middleware('auth');
 Route::post('friends/delete', 'FriendsController@deleteFriendship')->middleware('auth');
 
-// User functionality
+// User functionality'
 Route:: get('profile', 'UserController@profile');
-Route:: post('profile', 'UserController@update_avatar');
+Route:: get('profile/get_about_me', 'UserController@getAboutMe');
+Route:: get('profile/get_user_info','UserController@getUserInfo');
+Route:: post('profile/update_avatar/{id}', 'UserController@update_avatar')->name('update_avatar');
+Route:: post('profile/update_personal_info/{id}', 'UserController@update_personal_info')->name('update_personal_info');
+Route:: post('profile/update_about_me/{id}', 'UserController@update_about_me')->name('update_about_me');
 
 // Discussion and Comments functionality
-Route::get('/discussion', 'PostsController@index');
-Route::get('/discussion/create', 'PostsController@create');
-Route::get('/discussion/{post}', 'PostsController@show');
-Route::post('/discussion', 'PostsController@store');
-Route::post('/discussion/{post}/comments', 'CommentsController@store');
+
+Route::get('/discussion', 'PostsController@index'); //Show all post
+Route::get('/discussion/create', 'PostsController@create'); //Show a form to create the post
+Route::get('/discussion/{post}', 'PostsController@show'); //Display the post
+Route::post('/discussion', 'PostsController@store'); //Store the post
+Route::get('/discussion/{post}/edit', 'PostsController@edit'); //Show a form to edit existing post
+Route::patch('/discussion/{post}', 'PostsController@update'); //Update the edited post
+Route::delete('/discussion/{post}', 'PostsController@destroy'); //Delete a post
+
+Route::post('/discussion/{post}/comments', 'CommentsController@store'); //Comment on the post
 
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');
