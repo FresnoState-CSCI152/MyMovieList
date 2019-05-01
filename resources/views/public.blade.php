@@ -19,6 +19,7 @@
                             {{-- if current user's friend_id == public user's user_id --}}
                             {{-- then they are friends --}}
 
+
                             <form method="POST" action="/friends/createrequest">
 
                                 {{ csrf_field() }}

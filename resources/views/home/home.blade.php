@@ -6,7 +6,7 @@
         @if (Route::has('login'))
             <div class='top-right links'>
                 @auth
-                <div class='container'>
+                <div class='container-fluid'>
                     <div class='row justify-content-between mb-3'>
                         <div class='col-10'>
                             @if ($userId == Auth::user()->id)
@@ -18,14 +18,24 @@
                     </div>
                 </div>
 
-                <hr>
+                <hr>            
 
                 <div class='container'>
-                    <div id='reviews' user-id='{{$userId}}'>
-                        @include('home/reviews')
-                    </div>
-                    <div id='recommends' user-id='{{$userId}}'>
-                        @include('home/recommends')
+
+                    {{-- tabs for reviews/recommends --}}
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="pills-reviews-tab" data-toggle="pill" href="#pills-reviews" role="tab" aria-controls="pills-reviews" aria-selected="true">Reviewed</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="pills-recommends-tab" data-toggle="pill" href="#pills-recommends" role="tab" aria-controls="pills-recommends" aria-selected="false">Recommended</a>
+                      </li>
+                    </ul>
+
+                    {{-- tab content --}}
+                    <div class="tab-content" id="pills-tabContent">
+                      <div class="tab-pane fade show active" id="pills-reviews" user-id="{{$userId}}" role="tabpanel" aria-labelledby="pills-reviews-tab">@include('home/reviews')</div>
+                      <div class="tab-pane fade" id="pills-recommends" user-id="{{$userId}}" role="tabpanel" aria-labelledby="pills-recommends-tab">@include('home/recommends')</div>
                     </div>
 
                     {{-- if the user has no reviews and no recommends, display hint --}}
@@ -36,89 +46,102 @@
                             @endif
                         </div>
                     </div>
-
                 </div>
 
+                
 
+                {{-- user not logged in, homepage --}}
                 @else
-                    <h1>Welcome to MyMovieList!</h1>
-                    <h2>Please register or login!</h2>
-                    <div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+                <div class="jumbotron">
+                  <div class="container text-white">
+                    <h1 class="display-4">Welcome to MyMovieList!</h1>
+                    <p class="lead">Social media for movie lovers.</p>
+                    <hr class="my-4 bg-light">
+                    <p>Please register or login!</p>
+                  </div>
+                </div>
 
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address or Username') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control{{ $errors->has('email') || $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
+                {{-- login/register card --}}
+{{--                 <img src="movie_shots.gif" class="img-fluid" alt="Responsive image">
+ --}}
+                
+                <div class="container">
+                    <div class="row justify-content-center mt-5">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">{{ __('Login') }}</div>
+                
+                                <div class="card-body">
+                                    <form method="POST" action="{{ route('login') }}">
+                                        @csrf
+                
+                                        <div class="form-group row">
+                                            <label for="name" class="col-sm-4 col-form-label text-md-right">{{ __('E-Mail Address or Username') }}</label>
+                
+                                            <div class="col-md-6">
+                                                <input id="name" type="text" class="form-control{{ $errors->has('email') || $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
+                
+                                                @if ($errors->has('name'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('name') }}</strong>
+                                                    </span>
+                                                @endif
+                
+                                                @if ($errors->has('email'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('email') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row">
+                                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                
+                                            <div class="col-md-6">
+                                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                
+                                                @if ($errors->has('password'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('password') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row">
+                                            <div class="col-md-6 offset-md-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                
+                                                    <label class="form-check-label" for="remember">
+                                                        {{ __('Remember Me') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row mb-0">
+                                            <div class="col-md-8 offset-md-4">
+                                                <button type="submit" class="btn btn-primary">
+                                                    {{ __('Login') }}
+                                                </button>
+                
+                                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                                    {{ __('Forgot Your Password?') }}
+                                                </a>
+                                                <a class="btn btn-link" href="{{ route('register') }}">
+                                                    {{ __('Register') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
-                                <a class="btn btn-link" href="{{ route('register') }}">
-                                    {{ __('Register') }}
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
                 @endauth
             </div>
         @endif
