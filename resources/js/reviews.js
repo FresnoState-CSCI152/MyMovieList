@@ -4,7 +4,7 @@ $(document).ready(function() {
     // Filter review cards based on the specified genre
     $('#filter-and-sort-button_reviews').on('click', function(event) {
         let genre = $("#genre-select-menu_reviews").val();
-        let userId = Number($('#reviews').attr('user-id'));
+        let userId = Number($('#pills-reviews').attr('user-id'));
         let sortUserScore = $("#sort-user-score_reviews").val();
         $.ajaxSetup({
             headers: {
@@ -22,7 +22,7 @@ $(document).ready(function() {
                     if (reviewCardsHtml) {
                         $("#review-cards").empty();
                         $("#review-cards").append(reviewCardsHtml);
-                        $("#genre-select-menu-button_reviews").prop("disabled", true);
+                        $("#filter-and-sort-button_reviews").prop("disabled", true);
                     }
                 },
                 error: function (errorData) {
@@ -35,7 +35,7 @@ $(document).ready(function() {
     // Filter recommend cards based on the specified genre
     $('#filter-and-sort-button_recommends').on('click', function(event) {
         let genre = $("#genre-select-menu_recommends").val();
-        let userId = Number($('#recommends').attr('user-id'));
+        let userId = Number($('#pills-recommends').attr('user-id'));
         let sortCreationDate = $("#sort-creation-date_recommends").val();
         $.ajaxSetup({
             headers: {
@@ -53,7 +53,7 @@ $(document).ready(function() {
                     if (recommendCardsHtml) {
                         $("#recommend-cards").empty();
                         $("#recommend-cards").append(recommendCardsHtml);
-                        $("#genre-select-menu-button_recommends").prop("disabled", true);
+                        $("#filter-and-sort-button_recommends").prop("disabled", true);
                     }
                 },
                 error: function (errorData) {
