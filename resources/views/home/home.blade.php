@@ -18,14 +18,24 @@
                     </div>
                 </div>
 
-                <hr>
+                <hr>            
 
                 <div class='container'>
-                    <div id='reviews' user-id='{{$userId}}'>
-                        @include('home/reviews')
-                    </div>
-                    <div id='recommends' user-id='{{$userId}}'>
-                        @include('home/recommends')
+
+                    {{-- tabs for reviews/recommends --}}
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="pills-reviews-tab" data-toggle="pill" href="#pills-reviews" role="tab" aria-controls="pills-reviews" aria-selected="true">Reviewed</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="pills-recommends-tab" data-toggle="pill" href="#pills-recommends" role="tab" aria-controls="pills-recommends" aria-selected="false">Recommended</a>
+                      </li>
+                    </ul>
+
+                    {{-- tab content --}}
+                    <div class="tab-content" id="pills-tabContent">
+                      <div class="tab-pane fade show active" id="pills-reviews" user-id="{{$userId}}" role="tabpanel" aria-labelledby="pills-reviews-tab">@include('home/reviews')</div>
+                      <div class="tab-pane fade" id="pills-recommends" user-id="{{$userId}}" role="tabpanel" aria-labelledby="pills-recommends-tab">@include('home/recommends')</div>
                     </div>
 
                     {{-- if the user has no reviews and no recommends, display hint --}}
@@ -36,7 +46,6 @@
                             @endif
                         </div>
                     </div>
-
                 </div>
 
                 
