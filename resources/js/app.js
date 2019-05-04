@@ -7,6 +7,7 @@
 
 require('./bootstrap');
 require('./reviews');
+require('./chat');
 
 window.Vue = require('vue');
 
