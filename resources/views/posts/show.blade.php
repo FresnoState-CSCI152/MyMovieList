@@ -47,7 +47,9 @@
 						  </div>
 					</div>
                     <br>
+                    @can('edit',$post)
                     <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
+                    @endcan
 				</div>
 			</div>
 		</div>
@@ -90,12 +92,16 @@
             			</div>	
                 		<div class="card-body">
 							{!! $comment->body!!}
+						</div>
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <button onclick="removeComment({{$comment->id}})">Remove</button>
+                                <div class="col-sm-4 right">
+                                    @can('deleteComment',$comment)
+                                    <div data-toggle="tooltip" title="Click to delete Comment" style="color: grey">
+                                        <ion-icon name="trash" style="width:25px;height:25px;" onclick="removeComment({{$comment->id}})">Remove</ion-icon>
+                                    </div>
+                                    @endcan
                                 </div>
                             </div>
-						</div>
 					</div>
 				</div>
 			</div>	

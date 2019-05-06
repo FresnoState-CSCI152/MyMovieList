@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\Policies\PostPolicy;
 
 class Post extends Model
 {
