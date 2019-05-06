@@ -47,67 +47,26 @@
 						  </div>
 					</div>
                     <br>
+                    {{--display comments--}}
+                    @include('Partials.comment_replies', ['comments' => $post->comments, 'post_id' => $post->id])
+                    @can('edit',$post)
                     <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
+                    @endcan
 				</div>
 			</div>
 		</div>
         
-        
-
-		{{-- List of available comments --}}
-		@if(count($post->comments))
-		@foreach ($post->comments as $comment)
-		<div class="container">
-    		<div class="row mb-3">
-                <div class="col-xs">
-                    <ion-icon name="arrow-dropup" class="commUp" style="font-size: 25px" onclick="commentUpvote('up', {{$comment->id}})"></ion-icon>
-                        <div class="col-xs-1 offset-4">
-                            <span class="comment_num">{{$comment->vote_count}}</span>
-                        </div>
-                        <div class="row-sm">
-                            <ion-icon name="arrow-dropdown" class="commDown" style="font-size: 25px" onclick="commentUpvote('down', {{$comment->id}})"></ion-icon>
-                        </div>
-                </div>
-        		<div class="col-md">
-            		<div class="card shadow-sm bg-white rounded"> 
-            			<div class="card-header">
-            				<div class="row">
-            					<div class="col- ml-2 d-flex align-items-center">
-            						<img src="/uploads/avatars/{{ $comment->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%">
-            					</div>
-            					<div class="col d-flex align-items-center">
-            						<h6><strong><a href="/public/{{ $comment->user->id }}">{{ $comment->user->name }}</a></strong></h6>
-            					</div>
-            					<div class="col d-flex align-items-center justify-content-end">
-            						<h6>
-            							<strong>{{ $comment->created_at->diffForHumans() }}</strong> 
-            							&nbsp; ⁝ &nbsp;
-            							{{ $comment->created_at->tz('America/Los_Angeles')->toDayDateTimeString() }}
-            						</h6>
-            					</div>
-            				</div>
-
-            			</div>	
-                		<div class="card-body">
-							{!! $comment->body!!}
-						</div>
-					</div>
-				</div>
-			</div>	
-		</div>
-		@endforeach
-		@endif
-
 		<hr>
 
 		{{-- Add a comment --}}
 		<div class="card shadow-sm bg-white rounded mb-3">
 			<div class="card-block m-3">
 				<h5>Join the conversation.</h5>
-				<form method="POST" action="/discussion/{{ $post->id }}/comments">
+				<form method="POST" action="{{route('add')}}">
 					{{ csrf_field() }}
 					<div class="form-group">
 						<textarea id="body" name="body" placeholder="Your comment here." class="form-control" required></textarea>
+                        <input type="hidden" name="post_id" value="{{$post->id}}">
 					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-primary">Add Comment</button>
@@ -118,8 +77,6 @@
 
 			</div>
 		</div>
-
-	</div>
 
 <script type="text/javascript">
 clicked = true;
@@ -148,6 +105,8 @@ function upvote(status)
 
     var voteValue;
 
+    // check current vote status
+    // assign value based on if it's up or down
     if (status == 'up')
     {
         voteValue = 1;
@@ -206,6 +165,36 @@ function commentUpvote(status, id)
             url: "/discussion/{{$post->id}}/commentVote/{id}",
             data: voteData,
             success: function(voteData)
+            {
+             location.reload();
+            //$('.comment_num').load("/discussion/{{$post->id}} .comment_num");
+            },
+            error: function(errorData)
+            {
+                alert('failed');
+            },
+            dataType: "json",
+    });
+}
+
+function removeComment(id)
+{
+
+    $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
+
+    var commentData = 
+    {
+        'id': id
+    }
+
+    $.ajax({type:"DELETE",
+            url: "/discussion/{{$post->id}}/deleteComment",
+            data: commentData,
+            success: function(commentData)
             {
              location.reload();
             //$('.comment_num').load("/discussion/{{$post->id}} .comment_num");

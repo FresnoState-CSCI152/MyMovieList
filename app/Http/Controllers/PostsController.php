@@ -73,10 +73,12 @@ class PostsController extends Controller
 
     public function votePost(Post $post)
     {
+        // update current vote tally for post
         $user = Auth::user();
         $post->submitVote((request('voteValue')), $user, $post->id, 'App\Post');
         $post->vote_count = $post->countVotes($post->id, 'App\Post');
         $post->save();
         return 1;
     }
+
 }

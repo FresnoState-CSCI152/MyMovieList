@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\Policies\PostPolicy;
 
 class Post extends Model
 {
@@ -9,20 +10,12 @@ class Post extends Model
 
     public function comments()
     {
-    	return $this->hasMany(Comment::class);
+    	return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
     public function user() // $post->user->name (to get user associated with post)
     {
     	return $this->belongsTo(User::class);
-    }
-
-    public function addComment($body)
-    {
-    	$this->comments()->create([
-            'body' => $body,
-            'user_id' => auth()->id()
-        ]);
     }
 
     public function votes()
