@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Auth;
 
 class PostsController extends Controller
 {
@@ -68,5 +69,14 @@ class PostsController extends Controller
     public function destroy($id){
         Post::find($id)->delete();
         return redirect('discussion');
+    }
+
+    public function votePost(Post $post)
+    {
+        $user = Auth::user();
+        $post->submitVote((request('voteValue')), $user, $post->id, 'App\Post');
+        $post->vote_count = $post->countVotes($post->id, 'App\Post');
+        $post->save();
+        return 1;
     }
 }

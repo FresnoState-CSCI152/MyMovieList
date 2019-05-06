@@ -60,8 +60,10 @@ Route::post('/discussion', 'PostsController@store'); //Store the post
 Route::get('/discussion/{post}/edit', 'PostsController@edit'); //Show a form to edit existing post
 Route::patch('/discussion/{post}', 'PostsController@update'); //Update the edited post
 Route::delete('/discussion/{post}', 'PostsController@destroy'); //Delete a post
+Route::post('/discussion/{post}/postUpdate', 'PostsController@votePost');
 
 Route::post('/discussion/{post}/comments', 'CommentsController@store'); //Comment on the post
+Route::post('/discussion/{post}/commentVote/{id}', 'CommentsController@votePost'); // upvote/downvote comment
 
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');

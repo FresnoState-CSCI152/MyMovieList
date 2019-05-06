@@ -7,6 +7,15 @@
 		{{-- original poster --}}
 		<div class="container">
     		<div class="row mb-3">
+                <div class="col-xs">
+                    <ion-icon name="arrow-dropup" class="postUp" style="font-size: 25px" onclick="upvote('up')"></ion-icon>
+                        <div class="col-xs-1 offset-4">
+                            <span id="post_vote_count">{{$post->vote_count}}</span>
+                        </div>
+                        <div class="row-sm">
+                            <ion-icon name="arrow-dropdown" class="postDown" style="font-size: 25px" onclick="upvote('down')"></ion-icon>
+                        </div>
+                </div>
         		<div class="col-md">
             		<div class="card shadow-sm bg-white rounded">
             			<div class="card-header">
@@ -26,10 +35,16 @@
             					</div>
             				</div>             
 
+                            <div class="col d-flex align-items-center justify-content-end">
+                                <h6><strong>{{$post->created_at->diffForHumans()}}</strong>
+                                    &nbsp; : &nbsp;
+                                    {{$post->created_at->tz('America/Los_Angeles')->toDayDateTimeString()}}</h6>
+                            </div>
+                        </div>
             			</div>
-                		<div class="card-body">
-							{!! $post->body!!}
-						</div>
+                		  <div class="card-body">
+							 {!! $post->body!!}
+						  </div>
 					</div>
                     <br>
                     <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
@@ -44,6 +59,15 @@
 		@foreach ($post->comments as $comment)
 		<div class="container">
     		<div class="row mb-3">
+                <div class="col-xs">
+                    <ion-icon name="arrow-dropup" class="commUp" style="font-size: 25px" onclick="commentUpvote('up', {{$comment->id}})"></ion-icon>
+                        <div class="col-xs-1 offset-4">
+                            <span class="comment_num">{{$comment->vote_count}}</span>
+                        </div>
+                        <div class="row-sm">
+                            <ion-icon name="arrow-dropdown" class="commDown" style="font-size: 25px" onclick="commentUpvote('down', {{$comment->id}})"></ion-icon>
+                        </div>
+                </div>
         		<div class="col-md">
             		<div class="card shadow-sm bg-white rounded"> 
             			<div class="card-header">
@@ -97,4 +121,101 @@
 
 	</div>
 
+<script type="text/javascript">
+clicked = true;
+$(".postUp").click(function(){
+    if(clicked)
+    {
+        $(this).css('color', Cookies.get('.postUpColor'));
+        Cookies.set('.postUpColor', 'red');
+        clicked = false;
+    }
+    else
+    {
+        $(this).css('color', Cookies.get('.postDownColor'));
+        Cookies.set('.postDownColor', 'black');
+        clicked = true;
+    }
+});
+
+function upvote(status)
+{
+    $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
+
+    var voteValue;
+
+    if (status == 'up')
+    {
+        voteValue = 1;
+    }
+    else if(status == 'down')
+    {
+        voteValue = -1;
+    }
+
+    var voteData = 
+    {
+        'voteValue': voteValue
+    }
+
+    $.ajax({type:"POST",
+            url: "/discussion/{{$post->id}}/postUpdate",
+            data: voteData,
+            success: function(voteData)
+            {
+                $("#post_vote_count").load("/discussion/{{$post->id}} #post_vote_count");
+            },
+            error: function(errorData)
+            {
+                alert('failed');
+            },
+            dataType: "json",
+    });
+}
+
+function commentUpvote(status, id)
+{
+    $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
+
+    var voteValue;
+
+    if (status == 'up')
+    {
+        voteValue = 1;
+    }
+    else if(status == 'down')
+    {
+        voteValue = -1;
+    }
+
+    var voteData = 
+    {
+        'voteValue': voteValue,
+        'id': id
+    }
+
+    $.ajax({type:"POST",
+            url: "/discussion/{{$post->id}}/commentVote/{id}",
+            data: voteData,
+            success: function(voteData)
+            {
+             location.reload();
+            //$('.comment_num').load("/discussion/{{$post->id}} .comment_num");
+            },
+            error: function(errorData)
+            {
+                alert('failed');
+            },
+            dataType: "json",
+    });
+}
+</script>
 @endsection
