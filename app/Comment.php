@@ -22,7 +22,7 @@ class Comment extends Model
 
     public function replies()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class,'post_id');
     }
 
     public function votes()

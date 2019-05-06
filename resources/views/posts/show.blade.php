@@ -92,22 +92,32 @@
             			</div>	
                 		<div class="card-body">
 							{!! $comment->body!!}
-						</div>
-                            <div class="row">
-                                <div class="col-sm-4 right">
+    				    </div>     
+					</div>
+
+                        <div class="row">
+                                    <div class="col-sm-1">
+                                        <label>Reply</label>
+                                    </div>
+                                    @can('editComment', $comment)
+                                    <div class="col-sm-1">
+                                        <label>Edit</label>
+                                     </div>
+                                    @endcan
                                     @can('deleteComment',$comment)
-                                    <div data-toggle="tooltip" title="Click to delete Comment" style="color: grey">
-                                        <ion-icon name="trash" style="width:25px;height:25px;" onclick="removeComment({{$comment->id}})">Remove</ion-icon>
+                                    <div class="col-sm-2">
+                                        <div data-toggle="tooltip" title="Click to delete Comment" style="color: grey">
+                                         <ion-icon name="trash" style="width:25px;height:25px;" onclick="removeComment({{$comment->id}})"></ion-icon>
+                                         <label>Delete</label>
+                                        </div>
                                     </div>
                                     @endcan
-                                </div>
-                            </div>
-					</div>
-				</div>
-			</div>	
-		</div>
-		@endforeach
-		@endif
+                        
+                        </div>
+			       </div>	
+		      </div>
+		      @endforeach
+		      @endif
 
 		<hr>
 
@@ -259,7 +269,6 @@ function removeComment(id)
             },
             dataType: "json",
     });
-
 }
 </script>
 @endsection

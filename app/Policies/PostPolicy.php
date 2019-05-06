@@ -30,4 +30,9 @@ class PostPolicy
     {
         return $user->id === $comment->user_id;
     }
+
+    public function editComment(User $user, Comment $comment)
+    {
+        return $user->id === $comment->user->id;
+    }
 }

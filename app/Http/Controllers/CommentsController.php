@@ -49,6 +49,13 @@ class CommentsController extends Controller
     public function deleteComment($id)
     {
         Comment::where('id', '=', request('id'))->delete();
-        return 1;
+    }
+
+    public function editComment(Request $request)
+    {
+        $user = Auth::user();
+        $comment = Comment::where('id', '=', request('id'))->where('user_id', '=', $user->id);
+        $comment->body = $request('body');
+        $comment->save();
     }
 }
