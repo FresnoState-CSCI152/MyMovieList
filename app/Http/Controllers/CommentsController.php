@@ -18,33 +18,34 @@ class CommentsController extends Controller
         $comment = new Comment;
         $comment->body = $request->body;
         $comment->user()->associate($request->user());
-        $post = Post::find(1);
+        $post = Post::find($request->post_id);
         $post->comments()->save($comment);
     	return back();
     }
 
+    public function replyStore(Request $request)
+    {
+        $reply = new Comment();
+        $reply->body = $request->body;
+        $reply->user()->associate($request->user());
+        $reply->parent_id = $request->comment_id;
+        $post = Post::find($request->post_id);
+        $post->comments()->save($reply);
+        return back();
+    }
     public function votePost(Post $post, $id)
     {
         $user = Auth::user();
-        $comment;
 
-        // iterate through list of comments that belong to the current post
-        // when a match is found, then proceed to update the current vote
-        foreach ($post->comments as $c)
+        $comment_id = request('id');
+        $vote = request('voteValue');
+
+        $comment = Comment::find($comment_id);
+        if ($comment->submitVote($vote, $user, $comment_id, 'App\Comment'))
         {
-            if ($c->id == request('id'))
-            {
-                $comment = $c;
-                $image = $c->votable;
-                // attempt to submit a vote
-                if ($comment->submitVote(request('voteValue'), $user, request('id'), 'App\Comment'))
-                {
-                    // when vote is updated successfully, calculate current amount of votes for comment
-                    $comment->vote_count =  $comment->countVotes(request('id'), 'App\Comment');
-                    $comment->save();
-                }
-               
-            }
+            $comment->vote_count = $comment->countVotes($comment_id, 'App\Comment');
+            $comment->save();
+            return 20;
         }
 
         return 0;

@@ -47,6 +47,8 @@
 						  </div>
 					</div>
                     <br>
+                    {{--display comments--}}
+                    @include('Partials.comment_replies', ['comments' => $post->comments, 'post_id' => $post->id])
                     @can('edit',$post)
                     <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
                     @endcan
@@ -54,71 +56,6 @@
 			</div>
 		</div>
         
-        
-
-		{{-- List of available comments --}}
-		@if(count($post->comments))
-		@foreach ($post->comments as $comment)
-		<div class="container">
-    		<div class="row mb-3">
-                <div class="col-xs">
-                    <ion-icon name="arrow-dropup" class="commUp" style="font-size: 25px" onclick="commentUpvote('up', {{$comment->id}})"></ion-icon>
-                        <div class="col-xs-1 offset-4">
-                            <span class="comment_num">{{$comment->vote_count}}</span>
-                        </div>
-                        <div class="row-sm">
-                            <ion-icon name="arrow-dropdown" class="commDown" style="font-size: 25px" onclick="commentUpvote('down', {{$comment->id}})"></ion-icon>
-                        </div>
-                </div>
-        		<div class="col-md">
-            		<div class="card shadow-sm bg-white rounded"> 
-            			<div class="card-header">
-            				<div class="row">
-            					<div class="col- ml-2 d-flex align-items-center">
-            						<img src="/uploads/avatars/{{ $comment->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%">
-            					</div>
-            					<div class="col d-flex align-items-center">
-            						<h6><strong><a href="/public/{{ $comment->user->id }}">{{ $comment->user->name }}</a></strong></h6>
-            					</div>
-            					<div class="col d-flex align-items-center justify-content-end">
-            						<h6>
-            							<strong>{{ $comment->created_at->diffForHumans() }}</strong> 
-            							&nbsp; ⁝ &nbsp;
-            							{{ $comment->created_at->tz('America/Los_Angeles')->toDayDateTimeString() }}
-            						</h6>
-            					</div>
-            				</div>
-
-            			</div>	
-                		<div class="card-body">
-							{!! $comment->body!!}
-    				    </div>     
-					</div>
-
-                        <div class="row">
-                                    <div class="col-sm-1">
-                                        <label>Reply</label>
-                                    </div>
-                                    @can('editComment', $comment)
-                                    <div class="col-sm-1">
-                                        <label>Edit</label>
-                                     </div>
-                                    @endcan
-                                    @can('deleteComment',$comment)
-                                    <div class="col-sm-2">
-                                        <div data-toggle="tooltip" title="Click to delete Comment" style="color: grey">
-                                         <ion-icon name="trash" style="width:25px;height:25px;" onclick="removeComment({{$comment->id}})"></ion-icon>
-                                         <label>Delete</label>
-                                        </div>
-                                    </div>
-                                    @endcan
-                        
-                        </div>
-			       </div>	
-		      </div>
-		      @endforeach
-		      @endif
-
 		<hr>
 
 		{{-- Add a comment --}}
@@ -140,8 +77,6 @@
 
 			</div>
 		</div>
-
-	</div>
 
 <script type="text/javascript">
 clicked = true;
