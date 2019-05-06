@@ -59,6 +59,8 @@
 
         {{-- for ionicon icons --}}
         <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
+		{{-- to store cookies --}}
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     </head>
 
     <body>

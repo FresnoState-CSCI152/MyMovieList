@@ -8,12 +8,12 @@
 		<div class="container">
     		<div class="row mb-3">
                 <div class="col-xs">
-                    <ion-icon name="arrow-dropup" style="font-size: 25px" onclick="upvote('up')"></ion-icon>
+                    <ion-icon name="arrow-dropup" class="postUp" style="font-size: 25px" onclick="upvote('up')"></ion-icon>
                         <div class="col-xs-1 offset-4">
                             <span id="post_vote_count">{{$post->vote_count}}</span>
                         </div>
                         <div class="row-sm">
-                            <ion-icon name="arrow-dropdown" style="font-size: 25px" onclick="upvote('down')"></ion-icon>
+                            <ion-icon name="arrow-dropdown" class="postDown" style="font-size: 25px" onclick="upvote('down')"></ion-icon>
                         </div>
                 </div>
         		<div class="col-md">
@@ -55,12 +55,12 @@
 		<div class="container">
     		<div class="row mb-3">
                 <div class="col-xs">
-                    <ion-icon name="arrow-dropup" style="font-size: 25px" onclick="commentUpvote('up', {{$comment->id}})"></ion-icon>
+                    <ion-icon name="arrow-dropup" class="commUp" style="font-size: 25px" onclick="commentUpvote('up', {{$comment->id}})"></ion-icon>
                         <div class="col-xs-1 offset-4">
                             <span class="comment_num">{{$comment->vote_count}}</span>
                         </div>
                         <div class="row-sm">
-                            <ion-icon name="arrow-dropdown" style="font-size: 25px" onclick="commentUpvote('down', {{$comment->id}})"></ion-icon>
+                            <ion-icon name="arrow-dropdown" class="commDown" style="font-size: 25px" onclick="commentUpvote('down', {{$comment->id}})"></ion-icon>
                         </div>
                 </div>
         		<div class="col-md">
@@ -116,6 +116,22 @@
 	</div>
 
 <script type="text/javascript">
+clicked = true;
+$(".postUp").click(function(){
+    if(clicked)
+    {
+        $(this).css('color', Cookies.get('.postUpColor'));
+        Cookies.set('.postUpColor', 'red');
+        clicked = false;
+    }
+    else
+    {
+        $(this).css('color', Cookies.get('.postDownColor'));
+        Cookies.set('.postDownColor', 'black');
+        clicked = true;
+    }
+});
+
 function upvote(status)
 {
     $.ajaxSetup({
@@ -185,9 +201,8 @@ function commentUpvote(status, id)
             data: voteData,
             success: function(voteData)
             {
-             
-            $('.comment_num').load("/discussion/{{$post->id}} .comment_num");
-
+             location.reload();
+            //$('.comment_num').load("/discussion/{{$post->id}} .comment_num");
             },
             error: function(errorData)
             {
