@@ -63,4 +63,5 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\User', 'recommends', 'recommender_id', 'recomendee_id')->withTimestamps();
     }
+
 }

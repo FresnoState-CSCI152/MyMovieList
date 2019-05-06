@@ -23,6 +23,8 @@ class CreatePostsTable extends Migration
 
             $table->text('body');
 
+            $table->integer('vote_count')->default(0);
+
             $table->timestamps();
 
         });

@@ -4,7 +4,8 @@ namespace App;
 
 class Post extends Model
 {
-    protected $fillable = ['user_id', 'title', 'body'];
+    protected $fillable = ['user_id', 'title', 'body', 'vote_count'];
+    use Votable;
 
     public function comments()
     {
@@ -23,4 +24,10 @@ class Post extends Model
             'user_id' => auth()->id()
         ]);
     }
+
+    public function votes()
+    {
+        return $this->morphMany(Vote::class, 'votable');
+    }
+    
 }

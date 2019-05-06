@@ -7,29 +7,39 @@
 		{{-- original poster --}}
 		<div class="container">
     		<div class="row mb-3">
+                <div class="col-xs">
+                    <ion-icon name="arrow-dropup" style="font-size: 25px" onclick="upvote('up')"></ion-icon>
+                        <div class="col-xs-1 offset-4">
+                            <span id="post_vote_count">{{$post->vote_count}}</span>
+                        </div>
+                        <div class="row-sm">
+                            <ion-icon name="arrow-dropdown" style="font-size: 25px" onclick="upvote('down')"></ion-icon>
+                        </div>
+                </div>
         		<div class="col-md">
             		<div class="card shadow-sm bg-white rounded">
             			<div class="card-header">
             				<h1>{{ $post->title }}</h1>
             				<hr>
-            				<div class="row">
-            					<div class="col- ml-2 d-flex align-items-center">
-            						<img src="/uploads/avatars/{{ $post->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%">
-            					</div>
-            					<div class="col d-flex align-items-center">
-            						<h6><strong><a href="/public/{{ $post->user->id }}">{{ $post->user->name }}</a></strong></h6>
-            					</div>
-            					<div class="col d-flex align-items-center justify-content-end">
-            						<h6><strong>{{ $post->created_at->diffForHumans() }}</strong>
-            						&nbsp; ⁝ &nbsp;
-            						{{ $post->created_at->tz('America/Los_Angeles')->toDayDateTimeString() }}</h6>
-            					</div>
-            				</div>
+                            <div class="row">
+            				<div class="col- ml-2 d-flex align-items-center">
+                                <img src="/uploads/avatars/{{ $post->user->avatar }} " style="width:32px; height:32px; position: relative; border-radius: 50%">
+                            </div>
 
+                            <div class="col d-flex align-items-center">
+                                <h6><strong><a href="/public/{{$post->user->id}}">{{$post->user->name}}</a></strong></h6>
+                            </div>
+
+                            <div class="col d-flex align-items-center justify-content-end">
+                                <h6><strong>{{$post->created_at->diffForHumans()}}</strong>
+                                    &nbsp; : &nbsp;
+                                    {{$post->created_at->tz('America/Los_Angeles')->toDayDateTimeString()}}</h6>
+                            </div>
+                        </div>
             			</div>
-                		<div class="card-body">
-							{!! $post->body!!}
-						</div>
+                		  <div class="card-body">
+							 {!! $post->body!!}
+						  </div>
 					</div>
                     <br>
                     <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
@@ -44,6 +54,15 @@
 		@foreach ($post->comments as $comment)
 		<div class="container">
     		<div class="row mb-3">
+                <div class="col-xs">
+                    <ion-icon name="arrow-dropup" style="font-size: 25px" onclick="commentUpvote('up', {{$comment->id}})"></ion-icon>
+                        <div class="col-xs-1 offset-4">
+                            <span class="comment_num">{{$comment->vote_count}}</span>
+                        </div>
+                        <div class="row-sm">
+                            <ion-icon name="arrow-dropdown" style="font-size: 25px" onclick="commentUpvote('down', {{$comment->id}})"></ion-icon>
+                        </div>
+                </div>
         		<div class="col-md">
             		<div class="card shadow-sm bg-white rounded"> 
             			<div class="card-header">
@@ -96,4 +115,86 @@
 
 	</div>
 
+<script type="text/javascript">
+function upvote(status)
+{
+    $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
+
+    var voteValue;
+
+    if (status == 'up')
+    {
+        voteValue = 1;
+    }
+    else if(status == 'down')
+    {
+        voteValue = -1;
+    }
+
+    var voteData = 
+    {
+        'voteValue': voteValue
+    }
+
+    $.ajax({type:"POST",
+            url: "/discussion/{{$post->id}}/postUpdate",
+            data: voteData,
+            success: function(voteData)
+            {
+                $("#post_vote_count").load("/discussion/{{$post->id}} #post_vote_count");
+            },
+            error: function(errorData)
+            {
+                alert('failed');
+            },
+            dataType: "json",
+    });
+}
+
+function commentUpvote(status, id)
+{
+    $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
+
+    var voteValue;
+
+    if (status == 'up')
+    {
+        voteValue = 1;
+    }
+    else if(status == 'down')
+    {
+        voteValue = -1;
+    }
+
+    var voteData = 
+    {
+        'voteValue': voteValue,
+        'id': id
+    }
+
+    $.ajax({type:"POST",
+            url: "/discussion/{{$post->id}}/commentVote/{id}",
+            data: voteData,
+            success: function(voteData)
+            {
+             
+            $('.comment_num').load("/discussion/{{$post->id}} .comment_num");
+
+            },
+            error: function(errorData)
+            {
+                alert('failed');
+            },
+            dataType: "json",
+    });
+}
+</script>
 @endsection
