@@ -10,11 +10,6 @@ class Comment extends Model
 	protected $fillable = ['body', 'user_id', 'vote_count'];
 	use Votable;
 
-    public function post()
-    {
-    	return $this->belongsTo(Post::class);
-    }
-
     public function user() // $comment->user->name (to get user associated with comment)
     {
     	return $this->belongsTo(User::class);
@@ -22,7 +17,7 @@ class Comment extends Model
 
     public function replies()
     {
-        return $this->hasMany(Comment::class,'post_id');
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 
     public function votes()

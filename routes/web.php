@@ -67,7 +67,7 @@ Route::post('/discussion/{post}/comments', 'CommentsController@store'); //Commen
 Route::post('/discussion/{post}/commentVote/{id}', 'CommentsController@votePost'); // upvote/downvote comment
 Route::delete('/discussion/{post}/deleteComment', 'CommentsController@deleteComment'); // delete a comment
 Route::post('/discussion/{post}/editComment', 'CommentsController@editComment'); // edit a comment
-
+Route::post('/comment/store', 'CommentsController@store')->name('add');
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');
 

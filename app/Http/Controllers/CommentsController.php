@@ -9,13 +9,17 @@ use Auth;
 
 class CommentsController extends Controller
 {
-    public function store(Post $post)
+    public function store(Request $request)
     {
-    	$this->validate(request(), ['body' => 'required|min:2']);
+    	//$this->validate(request(), ['body' => 'required|min:2']);
 
     	// add a comment to a post
-    	$post->addComment(request('body'));
-
+    	//$post->addComment(request('body'));
+        $comment = new Comment;
+        $comment->body = $request->body;
+        $comment->user()->associate($request->user());
+        $post = Post::find(1);
+        $post->comments()->save($comment);
     	return back();
     }
 
@@ -49,6 +53,7 @@ class CommentsController extends Controller
     public function deleteComment($id)
     {
         Comment::where('id', '=', request('id'))->delete();
+        return 1;
     }
 
     public function editComment(Request $request)

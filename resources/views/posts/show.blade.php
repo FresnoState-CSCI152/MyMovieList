@@ -125,10 +125,11 @@
 		<div class="card shadow-sm bg-white rounded mb-3">
 			<div class="card-block m-3">
 				<h5>Join the conversation.</h5>
-				<form method="POST" action="/discussion/{{ $post->id }}/comments">
+				<form method="POST" action="{{route('add')}}">
 					{{ csrf_field() }}
 					<div class="form-group">
 						<textarea id="body" name="body" placeholder="Your comment here." class="form-control" required></textarea>
+                        <input type="hidden" name="post_id" value="{{$post->id}}">
 					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-primary">Add Comment</button>
@@ -261,7 +262,7 @@ function removeComment(id)
             success: function(commentData)
             {
              location.reload();
-            $('.comment_num').load("/discussion/{{$post->id}} .comment_num");
+            //$('.comment_num').load("/discussion/{{$post->id}} .comment_num");
             },
             error: function(errorData)
             {

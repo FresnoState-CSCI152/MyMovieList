@@ -17,12 +17,16 @@ class CreateCommentsTable extends Migration
 
             $table->increments('id');
 
-            $table->integer('user_id');
+            $table->integer('user_id')->unsigned();
             
-            $table->integer('post_id');
+            $table->integer('parent_id')->unsigned()->nullable();
 
             $table->string('body');
 
+            $table->integer('commentable_id')->unsigned();
+
+            $table->string('commentable_type');
+            
             $table->integer('vote_count')->default(0);
 
             $table->timestamps();
