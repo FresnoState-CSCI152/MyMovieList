@@ -24,14 +24,18 @@ class CommentsController extends Controller
         $user = Auth::user();
         $comment;
 
+        // iterate through list of comments that belong to the current post
+        // when a match is found, then proceed to update the current vote
         foreach ($post->comments as $c)
         {
             if ($c->id == request('id'))
             {
                 $comment = $c;
                 $image = $c->votable;
+                // attempt to submit a vote
                 if ($comment->submitVote(request('voteValue'), $user, request('id'), 'App\Comment'))
                 {
+                    // when vote is updated successfully, calculate current amount of votes for comment
                     $comment->vote_count =  $comment->countVotes(request('id'), 'App\Comment');
                     $comment->save();
                 }
@@ -39,6 +43,12 @@ class CommentsController extends Controller
             }
         }
 
-        return 1000;
+        return 0;
+    }
+
+    public function deleteComment($id)
+    {
+        Comment::where('id', '=', request('id'))->delete();
+        return 1;
     }
 }

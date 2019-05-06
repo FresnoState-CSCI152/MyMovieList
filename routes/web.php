@@ -62,9 +62,10 @@ Route::patch('/discussion/{post}', 'PostsController@update'); //Update the edite
 Route::delete('/discussion/{post}', 'PostsController@destroy'); //Delete a post
 Route::post('/discussion/{post}/postUpdate', 'PostsController@votePost');
 
+// comment functionality
 Route::post('/discussion/{post}/comments', 'CommentsController@store'); //Comment on the post
 Route::post('/discussion/{post}/commentVote/{id}', 'CommentsController@votePost'); // upvote/downvote comment
-
+Route::delete('/discussion/{post}/deleteComment', 'CommentsController@deleteComment'); // delete a comment
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');
 

@@ -90,6 +90,11 @@
             			</div>	
                 		<div class="card-body">
 							{!! $comment->body!!}
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <button onclick="removeComment({{$comment->id}})">Remove</button>
+                                </div>
+                            </div>
 						</div>
 					</div>
 				</div>
@@ -148,6 +153,8 @@ function upvote(status)
 
     var voteValue;
 
+    // check current vote status
+    // assign value based on if it's up or down
     if (status == 'up')
     {
         voteValue = 1;
@@ -216,6 +223,37 @@ function commentUpvote(status, id)
             },
             dataType: "json",
     });
+}
+
+function removeComment(id)
+{
+
+    $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
+                }
+            });
+
+    var commentData = 
+    {
+        'id': id
+    }
+
+    $.ajax({type:"DELETE",
+            url: "/discussion/{{$post->id}}/deleteComment",
+            data: commentData,
+            success: function(commentData)
+            {
+             location.reload();
+            $('.comment_num').load("/discussion/{{$post->id}} .comment_num");
+            },
+            error: function(errorData)
+            {
+                alert('failed');
+            },
+            dataType: "json",
+    });
+
 }
 </script>
 @endsection
