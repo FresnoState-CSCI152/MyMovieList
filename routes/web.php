@@ -67,3 +67,7 @@ Route::post('/discussion/{post}/commentVote/{id}', 'CommentsController@votePost'
 
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');
+
+// Private chat
+Route::get('/chat/private', 'ChatController@show')->middleware('auth');
+Route::post('/chat/private', 'ChatController@sendMessage')->middleware('auth');

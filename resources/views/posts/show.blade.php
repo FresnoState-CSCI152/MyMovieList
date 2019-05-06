@@ -21,14 +21,19 @@
             			<div class="card-header">
             				<h1>{{ $post->title }}</h1>
             				<hr>
-                            <div class="row">
-            				<div class="col- ml-2 d-flex align-items-center">
-                                <img src="/uploads/avatars/{{ $post->user->avatar }} " style="width:32px; height:32px; position: relative; border-radius: 50%">
-                            </div>
-
-                            <div class="col d-flex align-items-center">
-                                <h6><strong><a href="/public/{{$post->user->id}}">{{$post->user->name}}</a></strong></h6>
-                            </div>
+            				<div class="row">
+            					<div class="col- ml-2 d-flex align-items-center">
+            						<img src="/uploads/avatars/{{ $post->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%">
+            					</div>
+            					<div class="col d-flex align-items-center">
+            						<h6><strong><a href="/public/{{ $post->user->id }}">{{ $post->user->name }}</a></strong></h6>
+            					</div>
+            					<div class="col d-flex align-items-center justify-content-end">
+            						<h6><strong>{{ $post->created_at->diffForHumans() }}</strong>
+            						&nbsp; ⁝ &nbsp;
+            						{{ $post->created_at->tz('America/Los_Angeles')->toDayDateTimeString() }}</h6>
+            					</div>
+            				</div>             
 
                             <div class="col d-flex align-items-center justify-content-end">
                                 <h6><strong>{{$post->created_at->diffForHumans()}}</strong>
@@ -81,9 +86,10 @@
             						</h6>
             					</div>
             				</div>
+
             			</div>	
                 		<div class="card-body">
-							{{ $comment->body }}
+							{!! $comment->body!!}
 						</div>
 					</div>
 				</div>
@@ -101,7 +107,7 @@
 				<form method="POST" action="/discussion/{{ $post->id }}/comments">
 					{{ csrf_field() }}
 					<div class="form-group">
-						<textarea name="body" placeholder="Your comment here." class="form-control" required></textarea>
+						<textarea id="body" name="body" placeholder="Your comment here." class="form-control" required></textarea>
 					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-primary">Add Comment</button>

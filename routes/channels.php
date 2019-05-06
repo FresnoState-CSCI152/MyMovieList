@@ -14,3 +14,7 @@
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('message.{senderId}.{receiverId}', function ($user, $senderId, $receiverId) {
+    return (int) $user->id === (int) $receiverId;
+});

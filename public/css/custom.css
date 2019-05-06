@@ -68,3 +68,57 @@ ion-icon {
     text-align: center;
     vertical-align: middle;
 }
+
+.jumbotron {
+  background-image: url("https://drive.google.com/uc?export=download&id=1z5BFQcAa6e9mKRGObQ2A9BIb-IrRxAem");
+  background-position: 0% 40%;
+  background-size: cover;
+  text-shadow: 1px 1px 3px black;
+}
+
+.purpink {
+  background-image: linear-gradient(to right, #7f00ff, #e100ff);
+  background-size: cover;
+}
+
+.tempting-azure {
+  background-image: linear-gradient(to left, #84fab0, #8fd3f4);
+  background-size: cover;
+}
+
+/*.jumbotron{
+  position: relative;
+    overflow: hidden;
+}
+
+.jumbotron .container {
+  position: relative;
+  color: #ffffff;
+  z-index: 2;
+}*/
+
+#video-background{ 
+  position: absolute;
+  height: auto;
+  width: auto;
+  min-height: 100%;
+  min-width: 100%;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 1;
+}
+
+#private-chat {
+  max-width: 30rem;
+}
+
+#private-chat-message-display {
+  overflow-y: scroll;
+  height: 20rem;
+}
+
+#message-user-name {
+  font-weight: bold;
+}

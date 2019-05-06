@@ -50,76 +50,81 @@
 			<div class="col-sm-4">
 				<h3>User Information</h3>
 					<div class="row">
-						<div class="col-xs-1" id="userInfo">
+
+						{{-- user info --}}
+						<div class="col" id="userInfo">
 							<p>Email: {{$user->email}}</p>
 							<p>Gender: {{$user->gender}}</p>
 							<p>Birthday: {{$user->birth_month}}/{{$user->birth_day}}/{{$user->birth_year}}</p>
 							<p>Location: {{$user->location}}</p>
-							<button class="button" onclick="updateUserInfo()">Edit</button>
+							<button class="btn btn-secondary" onclick="updateUserInfo()">Edit</button>
 						</div>
 
-							<div class="col-sm-6" id="userForm" style="display: none">
-								<form method="POST" action="{{route('update_personal_info',Auth::user()->id)}}">
-									{{csrf_field()}}
-									<label for="gender">Gender</label>
-									<select name="gender">
-										<option value="-">-</option>
-										<option value="male">Male</option>
-										<option value="female">Female</opion>
-									</select>
-									<label for="Month">Month</label>
-									<label for="Day">Day</label>
-									<label for="Year">Year</label>
-									<div class="row">
-										<div class="col-sm-3">
-									<input id="b_month" type="text" name="b_month" style="width:23px;">
-										</div>
-									<div class="col-sm-2">
-									<input id="b_day" type="text" name="b_day" style="width:23px;">
-								    </div>
-									<div class="col-sm-4">
-									<input id="b_year" type="text" name="b_year" style="width:40px;">
-										</div>
-									</div>
-									<label for="location">Location</label>
-									<input id="local" type="text" name="location">
-									<input type="hidden" name="_token" value="{{ csrf_token() }}">
-									<button type ="submit" name = "userForm" class="button">Update</button>
-								</form>
-							</div>
+						<div class="col" id="userForm" style="display: none">
+							<form method="POST" action="{{route('update_personal_info',Auth::user()->id)}}">
+								{{csrf_field()}}
+								<label for="gender">Gender</label>
+								<select name="gender">
+									<option value="-">-</option>
+									<option value="male">Male</option>
+									<option value="female">Female</opion>
+								</select>
+								
+								<div class="row m-3">
+								  <div class="col">
+								  	<label for="Month">Month</label>
+								    <input id="b_month" type="text" name="b_month" style="width:23px;">
+								  </div>
+								  <div class="col">
+								  	<label for="Day">Day</label>
+								    <input id="b_day" type="text" name="b_day" style="width:23px;">
+							      </div>
+								  <div class="col">
+								  	<label for="Year">Year</label>
+								    <input id="b_year" type="text" name="b_year" style="width:40px;">
+								  </div>
+								</div>
+								<label for="location">Location</label>
+								<input id="local" type="text" name="location">
+								<input type="hidden" name="_token" value="{{ csrf_token() }}">
+								<button type ="submit" name = "userForm" class="btn btn-secondary">Update</button>
+							</form>
+						</div>
 			</div>
 			</div>
 
 			<!-- About Me -->
-			<div class="col-sm-4">
+			<div class="col">
 				<h3>About Me</h3>
-
 				<div class="row">
-					<div class="col-sm-10" id="currentAboutMe">
+					
+					{{-- user bio --}}
+					<div class="col" id="currentAboutMe">
 						<p>{{$user->about_me}}</p>
-						<button class="button" onclick="showAboutMe()">Edit</button>
+						<button type="button" class="btn btn-secondary" onclick="showAboutMe()">Edit</button>
 					</div>
 
-
-					<div class="col-sm-4" id="updateAboutMe" style="display: none;">
+					{{-- editing user bio --}}
+					<div class="col" id="updateAboutMe" style="display: none;">
 						<form action="{{route('update_about_me',Auth::user()->id)}}" method="POST">
 							{{csrf_field()}}
 							<textarea name ="about_me" id="aboutMeText" class="form-control" rows=5 style="width:300px"></textarea>
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
-							<button class="button" type="submit" name="aboutMeForm">Update</button>
+							<button class="btn btn-secondary" type="submit" name="aboutMeForm">Update</button>
 						</form>
 					</div>
+
 				</div>
 			</div>
 
-			<div class="col-sm-4">
+			{{-- settings, change password --}}
+			<div class="col">
 				<h3>Settings</h3>
-					<div class="row">
-						<div class="col-sm-4">
-							<a href="#">ChangePassword</a>
-						</div>
-					</div>
+				<div class="row">
+					<a href="#">Change Password</a>
+				</div>
 			</div>
+
 	    </div>
 	</div>
 	<!--

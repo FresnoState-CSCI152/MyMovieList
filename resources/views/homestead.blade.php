@@ -2,7 +2,7 @@
 
 @section ('content')
 
-{{--Overlay for list display --}}
+{{-- overlay for list display --}}
 <div id="overlay">
 	<br />
 	<br />
@@ -10,82 +10,83 @@
 	<br />
 
 	<div class='container-fluid mb-5'>
-	<div class='row'>
-	<div class='col-3 pb-4'>
-	        <img id="movie_image" class='img-fluid shadow' src=''>
-	</div>
-	{{-- Items on side of movie poster image--}}
-  	<div class='col-9'>
-	<div class="table-responsive">
-		<table class='table table-bordered' style="color: white; background-color: rgba(0,0,0,1)">
-		    <thead>
-		    <tr>
-		        <th scope='col' style='width: 13%;'>Movie Title</th>
-		        <th scope='col'>Movie Description</th>
-		        <th scope='col' style='width: 16%;'>Movie Release</th>
-		        <th scope='col' style='width: 14%;'>TMDB Score</th>
-		    </tr>
-		    </thead>
+	  <div class='row'>
+	    <div class='col-3 pb-4'>
+	            <img id="movie_image" class='img-fluid shadow' src=''>
+	    </div>
 
-		    <tbody>
-		    <tr>
-		        <td id="review_title"></td>
-		        <td id="review_description"></td>
-		        <td id="review_release"></td>
-		        <td id="review_tmdb_score"></td>
-		    </tr>
-		    </tbody>
-		</table>
-	</div>{{--/table-repsonsive --}}
-
-	<x-star-rating id="starRating_for_review" value="5" number="10"></x-star-rating>
-	<textarea class="form-control" id="submit_review_textarea" rows="3"></textarea>
-	<div id="my_review_table" class="table-responsive">
-	<table class='table table-bordered' style='color: white; background-color: rgba(0,0,0,1)'>
-	    <thead>
-	    <tr>
-	        <th id="th_score" scope='col' style='width: 12%;'>Your Score</th>
-	        <th id="th_review" scope='col'>Your Review</th>
-	    </tr>
-	    </thead>
-	    <tbody>
-	    <tr>
-	        <td id="review_user_score"></td>
-	        <td id="review_user_review"></td>
-	    </tr>
-	    </tbody>
-	</table>
-	</div>{{--/my_reivew_table--}}
-
-	<button id="overlay_button_home" class="btn btn-primary" onclick="location.href='movies';">Go To Full List</button>
-	<button id="overlay_button_submit" class="btn btn-primary" onclick="confirmReview()">Submit</button>
-	<button class="btn btn-danger" onclick="overlay_off()">Cancel</button>
-
-	</div> {{--/Col-9 --}}
-	</div> {{--/Row--}}
+	    {{-- items on side of movie poster image--}}
+  	    <div class='col-9'>
+	      <div class="table-responsive">
+	      	<table class='table table-bordered' style="color: white; background-color: rgba(0,0,0,1)">
+	      	    <thead>
+	      	      <tr>
+	      	          <th scope='col' style='width: 13%;'>Movie Title</th>
+	      	          <th scope='col'>Movie Description</th>
+	      	          <th scope='col' style='width: 16%;'>Movie Release</th>
+	      	          <th scope='col' style='width: 14%;'>TMDB Score</th>
+	      	      </tr>
+	      	    </thead>      
+	      	    <tbody>
+	      	      <tr>
+	      	          <td id="review_title"></td>
+	      	          <td id="review_description"></td>
+	      	          <td id="review_release"></td>
+	      	          <td id="review_tmdb_score"></td>
+	      	      </tr>
+	      	    </tbody>
+	      	</table>
+	      </div>{{--/table-repsonsive --}}
+    
+	    <x-star-rating id="starRating_for_review" value="5" number="10"></x-star-rating>
+	    <textarea class="form-control" id="submit_review_textarea" rows="3"></textarea>
+	    <div id="my_review_table" class="table-responsive">
+	      <table class='table table-bordered' style='color: white; background-color: rgba(0,0,0,1)'>
+	          <thead>
+	            <tr>
+	                <th id="th_score" scope='col' style='width: 12%;'>Your Score</th>
+	                <th id="th_review" scope='col'>Your Review</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+	            <tr>
+	                <td id="review_user_score"></td>
+	                <td id="review_user_review"></td>
+	            </tr>
+	          </tbody>
+	      </table>
+	    </div>{{--/my_reivew_table--}}
+    
+	    <button id="overlay_button_home" class="btn btn-primary" onclick="location.href='movies';">Go To Full List</button>
+	    <button id="overlay_button_submit" class="btn btn-primary" onclick="confirmReview()">Submit</button>
+	    <button class="btn btn-danger" onclick="overlay_off()">Cancel</button>
+    
+	    </div> {{--/Col-9 --}}
+	  </div> {{--/Row--}}
 	</div>{{--/Contaier --}}
 </div>
 
 {{--three lists --}}
-<div class="container">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col">
 			<div class="mx-auto" style="width: 50%;">
-				<b>Top of Your List</b>
+				<h4>Top of Your List</h4>
 			</div>
 			<div id="top-10-list">
 			</div>
 		</div>
 		<div class="col">
 			<div class="mx-auto" style="width: 50%;">
-				<b>Top Recommended</b>
+				<h4>Top Recommended</h4>
 			</div>
 			<div id="top_recommended">
 			</div>
 		</div>
 		<div class="col">
-			<div class="mx-auto">
-				<b onclick="auto_recommend()">Movies You May Enjoy (Click to Refresh)</b>
+			<div class="mx-auto" style="width: 60%;">
+				<h4>Movies You May Enjoy</h4>
+				<button type="button" class="btn btn-secondary" onclick="auto_recommend()">Click to Refresh</button>				
 			</div>
 			<div id="recommended_from_tmdb">
 			</div>
@@ -133,7 +134,7 @@
 
 		completeButtonArgs = onButtonArguments + ', \'' + String(movie_list.user_score) + '\', \'' + String(movie_list.review.replace('\'', '')) + '\'';
 
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', false)">Review Details</button></div></div>';
+		list_string = '<div class="card shadow-sm m-4"><div class="card-body"><h4 class="card-title">' + (filter_num++) + '. &nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>Your Score: ' + movie_list.user_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', false)">Review Details</button></div></div>';
 
 		$('#top-10-list').append(list_string);
 	}
@@ -150,7 +151,7 @@
 
 		//title, img, description, release, tmbd_score, user_score, review,
 		completeButtonArgs = movie_data.tmdb_id + ',\'' + String(movie_title) + '\', \'' + movie_img + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'' + movie_data. user_score + '\',\'' + movie_data.review + '\', true, ' + movie_data.r_id;
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p>Recommended by <b>' + movie_data.r_name + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review</button></div></div>';
+		list_string = '<div class="card shadow-sm m-4"><div class="card-body"><h4 class="card-title">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p>Recommended by <b>' + movie_data.r_name + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ')">Review</button></div></div>';
 
 		$('#top_recommended').append(list_string);
 	}
@@ -178,7 +179,7 @@
 
 		//title, img, description, release, tmbd_score, user_score, review,
 		completeButtonArgs = movie_data.id + ',\'' + String(movie_title) + '\', \'' + movie_img + '\', \'' + release_date + '\',\'' + tmdb_score + '\',\'0\',\'placeholder\'';
-		list_string = '<div class="card"><div class="card-body"><h4 class="card-title border border-dark">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>TMDB Score: ' + tmdb_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', true)">Review</button></div></div>';
+		list_string = '<div class="card shadow-sm m-4"><div class="card-body"><h4 class="card-title">&nbsp;&nbsp;' +  movie_title + '</h4><img src="http://image.tmdb.org/t/p/w200'+ movie_img + '" alt="Card image cap" style="height: 10rem; float: left; padding-right: 10px;"><p><b>TMDB Score: ' + tmdb_score + '</b></p><button class="btn btn-primary" onclick="overlay_on(' + completeButtonArgs + ', true)">Review</button></div></div>';
 
 		$('#recommended_from_tmdb').append(list_string);
 	}

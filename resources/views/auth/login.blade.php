@@ -1,6 +1,16 @@
 @extends('templates/master')
 
 @section('content')
+
+<div class="jumbotron">
+  <div class="container text-white">
+    <h1 class="display-4">Welcome to MyMovieList!</h1>
+    <p class="lead">Social media for movie lovers.</p>
+    <hr class="my-4 bg-light">
+    <p>Please register or login!</p>
+  </div>
+</div>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
