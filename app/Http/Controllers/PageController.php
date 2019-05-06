@@ -50,10 +50,10 @@ class PageController extends Controller
             return view('home/home', ['reviews' => $reviews,
                                       'recommends' => $recommends,
                                       'userId' => $userId,
-                                      'friends' => Auth::user()->friends()->get(),]);
+                                      'friends' => Auth::user()->friends()->get(), 'home' => 'home']);
 		}
 		else
-			return view('home/home');
+			return view('home/home', ['home'=>'home']);
     }
     public function friendsMovies($friendId)
     {
@@ -300,17 +300,19 @@ class PageController extends Controller
     //Page returns
 	public function about()
 	{
-		return view('about');
+		return view('about', ['about' => true]);
 	}
 	public function account()
 	{
-		return view('account');
+        if(Auth::check()) return view('account', ['user' =>Auth::user(), 'account'=>true]);
+        else
+            return view('home/home', ['account'=>true]);
 	}
 	public function search()
 	{
-		if (Auth::check()) return view('search');
+		if (Auth::check()) return view('search', ['search'=>true]);
 		else
-			return view('home');
+			return view('home/home', ['search' => true]);
 	}
 	public function getTMDBjson(Request $request) {
 		$searchString = $request->input('data');

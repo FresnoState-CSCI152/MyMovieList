@@ -31,7 +31,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('homestead');
+        if (Auth::check()) return view('homestead', ['homestead'=>true]);
+        else
+            return view('home/home', ['homestead' => true]);
     }
 
     public function GetMovieData(Request $request){

@@ -13,14 +13,16 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testViews()
     {
-        $this->assertTrue(true);
+        $response = $this->get('/movies');
+        $response->assertViewHas('home');
+        $response = $this->get('/about');
+        $response->assertViewHas('about');
+        $response = $this->get('/account');
+        $response->assertViewHas('account');
+        $response = $this->get('/search');
+        $response->assertViewHas('search');
     }
-    
-   public function testBasicTest()
-   {
-       $response = $this->get('/');
-       $response->assertStatus(200);
-   }
+
 }
