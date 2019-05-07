@@ -77,6 +77,3 @@ Route::post('recommends/create', 'PageController@recommendMovie');
 // Private chat
 Route::get('/chat/private', 'ChatController@show')->middleware('auth');
 Route::post('/chat/private', 'ChatController@sendMessage')->middleware('auth');
-
-// Notifications
-Route::get('notifications/friend-requests', 'NotificationsController@userHasFriendRequests');
