@@ -23,7 +23,7 @@
             				<hr>
             				<div class="row">
             					<div class="col- ml-2 d-flex align-items-center">
-            						<img src="/uploads/avatars/{{ $post->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%">
+            						<a href="/public/{{ $post->user->id }}"><img src="/uploads/avatars/{{ $post->user->avatar }}" style="width:px; height:32px; position:relative; border-radius:50%"></a>
             					</div>
             					<div class="col d-flex align-items-center">
             						<h6><strong><a href="/public/{{ $post->user->id }}">{{ $post->user->name }}</a></strong></h6>
@@ -39,11 +39,24 @@
                                  {!! $post->body!!}
                         </div>
             			</div>
-                        <div class="row">
-                            <div class="col-sm">
-                            @can('edit',$post)
-                                <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
-                            @endcan
+                        <div class="row mt-2 mb-2">                            
+                            <div class="col-auto">
+                                <form method="POST" action="/friends/createrequest">
+
+                                    {{ csrf_field() }}
+
+                                    <input type="hidden" id="name" name="name" value="{{$post->user->name}}">
+                                    <button type="submit" class="btn btn-light btn-sm"><ion-icon name="people"></ion-icon> Send Friend Request</button>
+
+                                    @include ("errors/fielderrors", ["fieldName" => "name"])
+                                    @include ("flash-messages/success", ["successVar" => "requestSuccess"])
+
+                                </form>
+                            </div>
+                            <div class="col-auto">
+                             @can('edit', $post)
+                                 <a href = "/discussion/{{$post->id}}/edit" class="btn btn-light btn-sm"><ion-icon name="create"></ion-icon> Edit</a>
+                             @endcan
                             </div>
                         </div>
 					</div>
@@ -54,7 +67,7 @@
         
 		<hr>
 
-        {{--display comments--}}
+        {{-- Display comments --}}
         @include('Partials.comment_replies', ['comments' => $post->comments, 'post_id' => $post->id])
 
 		{{-- Add a comment --}}

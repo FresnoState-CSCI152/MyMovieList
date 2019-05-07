@@ -51,10 +51,12 @@ class PostsController extends Controller
 
     public function edit(Post $post)    
     {         
-        if($post->user_id !== auth()->id()){
+        if ($post->user_id !== auth()->id())
+        {
             return view("errors/unauthorized");
         }
-        return view ('posts.edit',compact('post'));    
+
+        return view('posts.edit', compact('post'));    
     }
 
     public function update(Post $post)
@@ -66,7 +68,8 @@ class PostsController extends Controller
         return redirect('discussion');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         Post::find($id)->delete();
         return redirect('discussion');
     }
