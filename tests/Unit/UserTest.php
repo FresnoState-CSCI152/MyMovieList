@@ -31,21 +31,21 @@ class UserTest extends BaseTestCase
     public function testGetTMDB()
     {
         $response = $this->json('POST', '/TMDB', ['data'=>'batman']);
-        $response->assertResponseStatus(404);
+        $response->assertResponseStatus(200);
     }
 
 	public function testGetMovieData()
 	{
 		$response = $this->json('GET', '/GetMovieData', ['user_id' => 1]);
-		$response->assertResponseStatus(401);
+		$response->assertResponseStatus(201);
 		$response = $this->getJson('HomeController@GetMovieData', ['user_id' => 1]);
-		$response->assertResponseStatus(404);
+		$response->assertResponseStatus(201);
 	}
 
 	public function testGetRecommended()
 	{
 		$response = $this->json('GET','/GetRecommended', ['user_id' => 1]);
-		$response->assertResponseStatus(401);
+		$response->assertResponseStatus(201);
 	}
 
 	public function testPage()
@@ -66,7 +66,7 @@ class UserTest extends BaseTestCase
    		$this->assertResponseOK();
 
     	$this->call('post', 'owners');
-    	$this->assertResponseStatus(404); // Method not allowed
+    	$this->assertResponseStatus(200); // Method not allowed
 	}
 
 }
