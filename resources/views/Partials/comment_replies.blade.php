@@ -36,14 +36,6 @@
     				    </div>     
 					</div>
 					<div class="row">
-                        <div class="col-sm-1">
-                            <label>Reply</label>
-                        </div>
-                        @can('editComment', $comment)
-                        <div class="col-sm-1">
-                            <label>Edit</label>
-                        </div>
-                        @endcan
                         @can('deleteComment',$comment)
                         <div class="col-sm-2">
                            <div data-toggle="tooltip" title="Click to delete Comment" style="color: grey">
