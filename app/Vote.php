@@ -10,6 +10,7 @@ class Vote extends Model
 {
 	protected $fillable = ['vote'];
 	use SoftDeletes;
+	// query to search for multiple primary keys
     protected function setKeysForSaveQuery(Builder $query)
     {
         $query
