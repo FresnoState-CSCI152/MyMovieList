@@ -1,20 +1,19 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
+use Tests\CreatesApplication;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\User;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
 
-
-class UserTest extends TestCase
+class UserTest extends BaseTestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-
+    use CreatesApplication;
+    public $baseUrl = 'http://localhost';
     //Test Views
     public function testViews()
     {
@@ -32,19 +31,42 @@ class UserTest extends TestCase
     public function testGetTMDB()
     {
         $response = $this->json('POST', '/TMDB', ['data'=>'batman']);
-        $response->assertStatus(404);
+        $response->assertResponseStatus(404);
     }
 
 	public function testGetMovieData()
 	{
 		$response = $this->json('GET', '/GetMovieData', ['user_id' => 1]);
-		$response->assertStatus(401);
+		$response->assertResponseStatus(401);
+		$response = $this->getJson('HomeController@GetMovieData', ['user_id' => 1]);
+		$response->assertResponseStatus(404);
 	}
 
 	public function testGetRecommended()
 	{
 		$response = $this->json('GET','/GetRecommended', ['user_id' => 1]);
-		$response->assertStatus(401);
+		$response->assertResponseStatus(401);
+	}
+
+	public function testPage()
+	{
+		$this->visit('login');
+   		$this->assertResponseOK();
+	}
+
+	public function testPage1()
+	{
+		$this->visit('search');
+   		$this->assertResponseOK();
+	}
+
+	public function testPage2()
+	{
+		$this->visit('homestead');
+   		$this->assertResponseOK();
+
+    	$this->call('post', 'owners');
+    	$this->assertResponseStatus(404); // Method not allowed
 	}
 
 }
