@@ -48,12 +48,12 @@
 
                         {{-- reply button with dropdown box --}}
                         <div class="col-sm-1">
-                            <a class="btn btn-light btn-sm" data-toggle="collapse" href="#collapseReply" role="button" aria-expanded="false" aria-controls="collapseReply">
+                            <a class="btn btn-light btn-sm" data-toggle="collapse" href="#collapseReply{{ $comment->id }}" role="button" aria-expanded="false" aria-controls="collapseReply{{ $comment->id }}">
                               <ion-icon name="undo"></ion-icon> Reply
                             </a>
                         </div>
 
-                        <div class="col-4 collapse" id="collapseReply">
+                        <div class="col-4 collapse" id="collapseReply{{ $comment->id }}">
                           <div class="card shadow-sm">
                             <div class="card-header">Reply</div>
                             <div class=" card-body">
