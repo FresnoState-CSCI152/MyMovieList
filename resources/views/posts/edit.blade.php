@@ -2,7 +2,7 @@
 
 @section ('content')
 <div class="col-sm-8">
-	<h1 class ="title">Edit Post </h1>
+	<h1 class ="title">Edit Post</h1>
 
 	<form method ="POST" action ="/discussion/{{$post->id}}">	
 		{{method_field('PATCH')}}

@@ -13,11 +13,12 @@
     return view('home');
 })->name('home');*/
 Route::get('/', 'HomeController@index');
+Route::get('home', 'HomeController@index');
+Route::get('homestead', 'HomeController@index');
 Route::get('movies','PageController@home');
 Route::get('about','PageController@about');
 Route::get('account','PageController@account');
 Route::get('public/{publicId}', 'PageController@publicProfile');
-Route::get('homestead', 'HomeController@index');
 
 // Search get and post methods
 Route::get('search', 'PageController@search');
@@ -71,6 +72,7 @@ Route::delete('/discussion/{post}/deleteComment', 'CommentsController@deleteComm
 Route::post('/discussion/{post}/editComment', 'CommentsController@editComment'); // edit a comment
 Route::post('/comment/store', 'CommentsController@store')->name('add');
 Route::post('/comment/replyStore', 'CommentsController@replyStore')->name('addReply');
+
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');
 

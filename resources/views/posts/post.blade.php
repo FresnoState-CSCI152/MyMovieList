@@ -4,7 +4,7 @@
 	</h2>
 	<div class="row">
 		<div class="col- ml-3">
-        	<img src="/uploads/avatars/{{ $post->user->avatar }}" style="width:px; height:32px; position:relative; 	border-radius:50%">
+        	<a href="/public/{{ $post->user->id }}"><img src="/uploads/avatars/{{ $post->user->avatar }}" style="width:px; height:32px; position:relative; 	border-radius:50%"></a>
     	</div>	
     	<div class="col d-flex align-items-center">
     		<p class="blog-post-meta">
