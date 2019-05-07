@@ -8,6 +8,7 @@
 require('./bootstrap');
 require('./reviews');
 require('./chat');
+require('./notifications');
 
 window.Vue = require('vue');
 

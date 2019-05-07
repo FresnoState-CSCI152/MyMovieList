@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <link rel="shortcut icon" href="favicon.ico" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="curr-user-id" content="{{ Auth::id() }}">
 
         <title>MyMovieList</title>
 

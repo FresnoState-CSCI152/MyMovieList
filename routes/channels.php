@@ -18,3 +18,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 Broadcast::channel('message.{senderId}.{receiverId}', function ($user, $senderId, $receiverId) {
     return (int) $user->id === (int) $receiverId;
 });
+
+Broadcast::channel('friend-request.{receiverId}', function ($user, $receiverId) {
+    return (int) $user->id === (int) $receiverId;
+});

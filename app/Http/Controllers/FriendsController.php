@@ -9,6 +9,7 @@ use App;
 use App\Rules\FriendRequestExists;
 use App\Rules\FriendshipExists;
 use Validator;
+use App\Events\FriendRequestSent;
 
 class FriendsController extends Controller
 {
@@ -32,6 +33,8 @@ class FriendsController extends Controller
 
         // Create a new friend request
         $sender->friendRequestsSent()->attach($receiverId);
+
+        broadcast(new FriendRequestSent($receiverId));
 
         request()->session()->flash("requestSuccess", "You have successfully made the friend request.");
         return redirect()->back();
