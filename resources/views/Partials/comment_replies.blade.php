@@ -1,4 +1,4 @@
-<!== class to display all replies for all comments -->
+<!== display all replies for all comments -->
 
 @foreach($comments as $comment)
 	<div class="container">
@@ -57,7 +57,7 @@
 				<form method="POST" action="{{route('addReply')}}">
 					{{ csrf_field() }}
 					<div class="form-group">
-						<textarea id="body" name="body" placeholder="Your comment here." class="form-control" required></textarea>
+						<textarea name="body" placeholder="Your comment here." class="form-control" required></textarea>
                         <input type="hidden" name="post_id" value="{{$post->id}}">
                         <input type="hidden" name="comment_id" value="{{$comment->id}}">
                         <div class="form-group">
@@ -65,87 +65,10 @@
 					    </div>
 					</div>
 				</form>
-
-				@include('errors/errors')
+                @include('Partials.comment_replies', ['comments' => $comment->replies])
 			</div>
 				</div>
 		    </div>
-		    @include('Partials.comment_replies', ['comments' => $comment->replies])
 		</div>
 
 @endforeach
-
-<script type="text/javascript">
-	function commentUpvote(status, id)
-{
-    $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-                }
-            });
-
-    var voteValue;
-
-    if (status == 'up')
-    {
-        voteValue = 1;
-    }
-    else if(status == 'down')
-    {
-        voteValue = -1;
-    }
-
-    var voteData = 
-    {
-        'voteValue': voteValue,
-        'id': id
-    }
-
-    $.ajax({type:"POST",
-            url: "/discussion/{{$post->id}}/commentVote/{id}",
-            data: voteData,
-            success: function(voteData)
-            {
-            alert(voteData);
-             location.reload();
-            //$('.comment_num').load("/discussion/{{$post->id}} .comment_num");
-            },
-            error: function(errorData)
-            {
-                alert('failed');
-            },
-            dataType: "json",
-    });
-}
-
-function removeComment(id)
-{
-
-    $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-                }
-            });
-
-    var commentData = 
-    {
-        'id': id
-    }
-
-    $.ajax({type:"DELETE",
-            url: "/discussion/{{$post->id}}/deleteComment",
-            data: commentData,
-            success: function(commentData)
-            {
-             alert('done');
-             location.reload();
-            //$('.comment_num').load("/discussion/{{$post->id}} .comment_num");
-            },
-            error: function(errorData)
-            {
-                alert('failed');
-            },
-            dataType: "json",
-    });
-}
-</script>

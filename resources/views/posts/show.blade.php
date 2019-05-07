@@ -34,29 +34,28 @@
             						{{ $post->created_at->tz('America/Los_Angeles')->toDayDateTimeString() }}</h6>
             					</div>
             				</div>             
-
-                            <div class="col d-flex align-items-center justify-content-end">
-                                <h6><strong>{{$post->created_at->diffForHumans()}}</strong>
-                                    &nbsp; : &nbsp;
-                                    {{$post->created_at->tz('America/Los_Angeles')->toDayDateTimeString()}}</h6>
-                            </div>
+                        </div>
+                        <div class="card-body">
+                                 {!! $post->body!!}
                         </div>
             			</div>
-                		  <div class="card-body">
-							 {!! $post->body!!}
-						  </div>
+                        <div class="row">
+                            <div class="col-sm">
+                            @can('edit',$post)
+                                <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
+                            @endcan
+                            </div>
+                        </div>
 					</div>
                     <br>
-                    {{--display comments--}}
-                    @include('Partials.comment_replies', ['comments' => $post->comments, 'post_id' => $post->id])
-                    @can('edit',$post)
-                    <a href = "/discussion/{{$post->id}}/edit" class="btn btn-primary">Edit</a>
-                    @endcan
 				</div>
 			</div>
 		</div>
         
 		<hr>
+
+        {{--display comments--}}
+        @include('Partials.comment_replies', ['comments' => $post->comments, 'post_id' => $post->id])
 
 		{{-- Add a comment --}}
 		<div class="card shadow-sm bg-white rounded mb-3">
