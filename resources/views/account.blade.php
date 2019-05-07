@@ -73,15 +73,15 @@
 								<div class="row m-3">
 								  <div class="col">
 								  	<label for="Month">Month</label>
-								    <input id="b_month" type="text" name="b_month" style="width:23px;">
+								    <input id="b_month" type="text" name="b_month" style="width:23px;" maxlength="2">
 								  </div>
 								  <div class="col">
 								  	<label for="Day">Day</label>
-								    <input id="b_day" type="text" name="b_day" style="width:23px;">
+								    <input id="b_day" type="text" name="b_day" style="width:23px;" maxlength="2">
 							      </div>
 								  <div class="col">
 								  	<label for="Year">Year</label>
-								    <input id="b_year" type="text" name="b_year" style="width:40px;">
+								    <input id="b_year" type="text" name="b_year" style="width:40px;" maxlength="4" minlength="4">
 								  </div>
 								</div>
 								<label for="location">Location</label>
@@ -121,7 +121,9 @@
 			<div class="col">
 				<h3>Settings</h3>
 				<div class="row">
-					<a href="#">Change Password</a>
+					<a class="btn btn-link" href="{{route('passwordForm')}}">
+                                    {{ __('Change Password') }}
+                    </a>
 				</div>
 			</div>
 

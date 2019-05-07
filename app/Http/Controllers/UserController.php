@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Image;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -86,4 +87,21 @@ class UserController extends Controller
         return $userInfo;
     }
 
+    public function showForm()
+    {
+        $user = Auth::user();
+        
+        return view('resetUserPassword', array('user' => Auth::user()));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $new_password = $request->new_password;
+
+        $user = Auth::user();
+        $new_n = Hash::make($new_password);
+        $user->password = $new_n;
+        $user->save();
+        return $this->profile();
+    }
 }
