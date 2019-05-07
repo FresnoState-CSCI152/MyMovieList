@@ -51,7 +51,7 @@ class PostsController extends Controller
     public function edit(Post $post)    
     {         
         if($post->user_id !== auth()->id()){
-            abort(403);
+            return view("errors/unauthorized");
         }
         return view ('posts.edit',compact('post'));    
     }

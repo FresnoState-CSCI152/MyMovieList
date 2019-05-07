@@ -18,6 +18,7 @@
             .nav-tabs {
                 border-bottom: none;
             }
+
             x-star-rating {
                 font-family: 'Ionicons';
                 font-size: 30px;
@@ -34,6 +35,7 @@
                 content: '\f2fc';
                 color: #fd0;
             }
+            
             #overlay {
               position: fixed;
               display: none;
