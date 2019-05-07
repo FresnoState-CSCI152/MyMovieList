@@ -16,4 +16,11 @@ class ExampleTest extends TestCase
     {
         $this->assertTrue(true);
     }
+
+
+    public function testApplication()
+    {
+        $response = $this->get('/movies');
+        $response->assertViewHas('home');
+    }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommentsTable extends Migration
+class VoteTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,21 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
-
+        Schema::create('votes', function (Blueprint $table)
+        {
             $table->increments('id');
 
             $table->integer('user_id')->unsigned();
-            
-            $table->integer('parent_id')->unsigned()->nullable();
 
-            $table->string('body');
+            $table->integer('votable_id')->unsigned();
 
-            $table->integer('commentable_id')->unsigned();
+            $table->string('votable_type');
 
-            $table->string('commentable_type');
-            
-            $table->integer('vote_count')->default(0);
-
+            $table->integer('vote');
             $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['user_id', 'votable_id', 'votable_type']);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
         });
     }
@@ -41,6 +39,5 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
     }
 }

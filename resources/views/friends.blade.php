@@ -92,7 +92,7 @@
                     <div class="card-body">
                         <ul class="list-group">
                             @foreach ($userFriends as $friend)
-                            <div class="d-inline-flex mb-2" id="{{ $friend->id }}">
+                            <div class="d-inline-flex mb-2" friend-id="{{ $friend->id }}">
                                 <img class="ml" src="/uploads/avatars/{{ $friend->avatar }}" style="width:36px; height:36px; position:relative; right:8px; border-radius:50%">
                                     <div class="btn-group dropright">
                                       <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -101,6 +101,7 @@
                                       <div class="dropdown-menu shadow">
                                         <!-- Dropdown menu links -->
                                         <a class="dropdown-item" href="/friends/{{ $friend->id }}">Movie Reviews</a>
+                                        <a class="dropdown-item" href="/chat/private?otherUserId={{ $friend->id }}">Private Chat</a>
                                         <button class="dropdown-item" type="button" onclick="deleteFriend({{ $friend->id }})">Remove</button>
                                       </div>
                                     </div>

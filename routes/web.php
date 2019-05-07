@@ -60,8 +60,18 @@ Route::post('/discussion', 'PostsController@store'); //Store the post
 Route::get('/discussion/{post}/edit', 'PostsController@edit'); //Show a form to edit existing post
 Route::patch('/discussion/{post}', 'PostsController@update'); //Update the edited post
 Route::delete('/discussion/{post}', 'PostsController@destroy'); //Delete a post
+Route::post('/discussion/{post}/postUpdate', 'PostsController@votePost');
 
+// comment functionality
 Route::post('/discussion/{post}/comments', 'CommentsController@store'); //Comment on the post
-
+Route::post('/discussion/{post}/commentVote/{id}', 'CommentsController@votePost'); // upvote/downvote comment
+Route::delete('/discussion/{post}/deleteComment', 'CommentsController@deleteComment'); // delete a comment
+Route::post('/discussion/{post}/editComment', 'CommentsController@editComment'); // edit a comment
+Route::post('/comment/store', 'CommentsController@store')->name('add');
+Route::post('/comment/replyStore', 'CommentsController@replyStore')->name('addReply');
 // Recommend functionality
 Route::post('recommends/create', 'PageController@recommendMovie');
+
+// Private chat
+Route::get('/chat/private', 'ChatController@show')->middleware('auth');
+Route::post('/chat/private', 'ChatController@sendMessage')->middleware('auth');

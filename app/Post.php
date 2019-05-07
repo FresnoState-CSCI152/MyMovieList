@@ -1,14 +1,16 @@
 <?php
 
 namespace App;
+use App\Policies\PostPolicy;
 
 class Post extends Model
 {
-    protected $fillable = ['user_id', 'title', 'body'];
+    protected $fillable = ['user_id', 'title', 'body', 'vote_count'];
+    use Votable;
 
     public function comments()
     {
-    	return $this->hasMany(Comment::class);
+    	return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
     public function user() // $post->user->name (to get user associated with post)
@@ -16,11 +18,9 @@ class Post extends Model
     	return $this->belongsTo(User::class);
     }
 
-    public function addComment($body)
+    public function votes()
     {
-    	$this->comments()->create([
-            'body' => $body,
-            'user_id' => auth()->id()
-        ]);
+        return $this->morphMany(Vote::class, 'votable');
     }
+    
 }

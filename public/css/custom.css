@@ -109,3 +109,16 @@ ion-icon {
   transform: translate3d(-50%, -50%, 0);
   z-index: 1;
 }
+
+#private-chat {
+  max-width: 30rem;
+}
+
+#private-chat-message-display {
+  overflow-y: scroll;
+  height: 20rem;
+}
+
+#message-user-name {
+  font-weight: bold;
+}
