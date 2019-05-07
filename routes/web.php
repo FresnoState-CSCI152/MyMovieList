@@ -50,6 +50,8 @@ Route:: get('profile/get_user_info','UserController@getUserInfo');
 Route:: post('profile/update_avatar/{id}', 'UserController@update_avatar')->name('update_avatar');
 Route:: post('profile/update_personal_info/{id}', 'UserController@update_personal_info')->name('update_personal_info');
 Route:: post('profile/update_about_me/{id}', 'UserController@update_about_me')->name('update_about_me');
+Route::get('profile/changePasswordForm', 'UserController@showForm')->name('passwordForm');
+Route::post('profile/updatePassword', 'UserController@updatePassword');
 
 // Discussion and Comments functionality
 
